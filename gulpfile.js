@@ -1,7 +1,13 @@
 var browserSync = require('browser-sync'),
     bump = require('gulp-bump'),
+    concat = require('gulp-concat'),
     del = require('del'),
-    gulp = require('gulp');
+    gulp = require('gulp'),
+    header = require('gulp-header'),
+    pkg = require('./package.json'),
+    rename = require('gulp-rename'),
+    sourcemaps = require('gulp-sourcemaps'),
+    uglify = require('gulp-uglify');
 
 var manifests = ['./bower.json', './package.json'];
 
@@ -42,6 +48,21 @@ gulp.task('sync', function server(){
         baseDir: '.'
       }
     });
+});
+
+
+gulp.task('build', function(){
+  var headerTemplate = '/* <%= name %> v<%= version %> - <%= date %> */\n';
+  var headerContent = {name: pkg.name, version: pkg.version, date: new Date()};
+
+  return gulp.src(['./vendor/promise/browser-raw.js', './vendor/promise/core.js', './src/images-ready.js'])
+    .pipe(concat('images-ready.js'))
+    .pipe(header(headerTemplate, headerContent))
+    .pipe(gulp.dest('./dist'))
+    .pipe(uglify({mangle: true}))
+    .pipe(rename('images-ready.min.js'))
+    .pipe(header(headerTemplate, headerContent))
+    .pipe(gulp.dest('./dist'));
 });
 
 
