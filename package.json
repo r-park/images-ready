@@ -1,0 +1,33 @@
+{
+  "name": "images-ready",
+  "version": "0.1.0",
+  "description": "ImagesReady",
+
+  "devDependencies": {
+    "browser-sync": "^2.7.3",
+    "del": "^1.2.0",
+    "gulp": "gulpjs/gulp.git#4.0",
+    "gulp-bump": "^0.3.1",
+    "promise": "^7.0.1"
+  },
+
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/r-park/images-ready.git"
+  },
+
+  "bugs": {
+    "url": "https://github.com/r-park/images-ready/issues"
+  },
+
+  "homepage": "https://github.com/r-park/images-ready",
+
+  "keywords": [],
+
+  "author": "Richard Park",
+  "license": "MIT"
+}

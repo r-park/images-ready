@@ -1,0 +1,24 @@
+{
+  "name": "images-ready",
+  "version": "0.1.0",
+  "description": "ImagesReady",
+
+  "dependencies": {
+    "jquery": "*"
+  },
+
+  "keywords": [],
+
+  "ignore": [
+    "**/.*",
+    "gulpfile.js",
+    "node_modules",
+    "package.json",
+    "src",
+    "target",
+    "tmp"
+  ],
+
+  "author": "Richard Park",
+  "license": "MIT"
+}
