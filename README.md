@@ -1,7 +1,7 @@
 # ImagesReady
 Promises/A+
 
-### Getting Started
+## Getting Started
 #### bower
 ```
 bower install images-ready
