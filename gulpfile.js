@@ -7,7 +7,8 @@ var browserSync = require('browser-sync'),
     pkg = require('./package.json'),
     rename = require('gulp-rename'),
     sourcemaps = require('gulp-sourcemaps'),
-    uglify = require('gulp-uglify');
+    uglify = require('gulp-uglify'),
+    umd = require('gulp-umd');
 
 var manifests = ['./bower.json', './package.json'];
 
@@ -51,18 +52,39 @@ gulp.task('sync', function server(){
 });
 
 
-gulp.task('build', function(){
+function build(options) {
   var headerTemplate = '/* <%= name %> v<%= version %> - <%= date %> */\n';
   var headerContent = {name: pkg.name, version: pkg.version, date: new Date()};
+  var umdHelper = function(){ return 'imagesReady'; };
 
-  return gulp.src(['./vendor/promise/browser-raw.js', './vendor/promise/core.js', './src/images-ready.js'])
-    .pipe(concat('images-ready.js'))
+  return gulp.src(options.src)
+    .pipe(concat(options.outfile))
+    .pipe(umd({exports: umdHelper, namespace: umdHelper}))
     .pipe(header(headerTemplate, headerContent))
     .pipe(gulp.dest('./dist'))
     .pipe(uglify({mangle: true}))
-    .pipe(rename('images-ready.min.js'))
+    .pipe(sourcemaps.write('./', {includeContent: true}))
+    .pipe(rename(options.minOutfile))
     .pipe(header(headerTemplate, headerContent))
     .pipe(gulp.dest('./dist'));
+}
+
+
+gulp.task('build', function(){
+  return build({
+    src: './src/images-ready.js',
+    outfile: 'images-ready.js',
+    minOutfile: 'images-ready.min.js'
+  });
+});
+
+
+gulp.task('build:promised', function(){
+  return build({
+    src: ['./vendor/promise/browser-raw.js', './vendor/promise/core.js', './src/images-ready.js'],
+    outfile: 'images-ready-promised.js',
+    minOutfile: 'images-ready-promised.min.js'
+  });
 });
 
 
