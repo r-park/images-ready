@@ -153,7 +153,7 @@ ImagesReady.prototype = {
 
 
 $.fn.imagesReady = function() {
-  var imagesReady = new ImagesReady(this[0], {jquery: true});
+  var imagesReady = new ImagesReady(this, {jquery: true});
   return imagesReady.result;
 };
 
