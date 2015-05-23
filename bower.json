@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "ImagesReady",
 
-  "dependencies": {
+  "devDependencies": {
     "jquery": "*"
   },
 
@@ -16,7 +16,8 @@
     "package.json",
     "src",
     "target",
-    "tmp"
+    "tmp",
+    "vendor"
   ],
 
   "author": "Richard Park",
