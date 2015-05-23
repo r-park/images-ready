@@ -21,7 +21,16 @@ function defer() {
 }
 
 
-
+/**
+ * @name ImagesReady
+ * @constructor
+ *
+ * @param {Element|Element[]|jQuery|NodeList|string} elements
+ *
+ * @param {{}}      [options]
+ * @param {boolean} [options.jquery]
+ *
+ */
 function ImagesReady(elements, options) {
   if (typeof elements === 'string') {
     elements = document.querySelectorAll(elements);
@@ -30,8 +39,8 @@ function ImagesReady(elements, options) {
   this.elements = this.toArray(elements);
   this.images = this.findImageElements(this.elements);
 
-  if (options.jquery) {
-    this.deferred = $.Deferred();
+  if (options && options.jquery) {
+    this.deferred = new $.Deferred();
     this.result = this.deferred.promise();
   }
   else {
@@ -47,25 +56,13 @@ function ImagesReady(elements, options) {
 }
 
 
+
 ImagesReady.prototype = {
 
-  clean : function() {
-    this.elements = null;
-    this.images = null;
-  },
-
-
-  toArray : function(object) {
-    if (Array.isArray(object)) return object;
-
-    if (typeof object.length === 'number') {
-      return slice.call(object);
-    }
-
-    return [object];
-  },
-
-
+  /**
+   * @param {Element[]} elements
+   * @returns {HTMLImageElement[]}
+   */
   findImageElements : function(elements) {
     var images = [],
         i = elements.length,
@@ -75,7 +72,7 @@ ImagesReady.prototype = {
     while (i--) {
       element = elements[i];
 
-      if ('IMG' === element.nodeName) {
+      if (element.nodeName === 'IMG') {
         images.push(element);
       }
       else if (element.nodeType && validNodeTypes[element.nodeType]) {
@@ -90,7 +87,10 @@ ImagesReady.prototype = {
   },
 
 
-  proxy : function(src) {
+  /**
+   * @param {string} imageSrc
+   */
+  proxy : function(imageSrc) {
     var image = new Image(),
         that = this;
 
@@ -105,20 +105,21 @@ ImagesReady.prototype = {
       image = null;
     });
 
-    image.src = src;
+    image.src = imageSrc;
   },
 
 
+  /**
+   *
+   */
   update : function() {
     this.verified++;
 
     if (this.total === this.verified) {
       if (this.total === this.loaded) {
-        console.log('SUCCESS');
         this.deferred.resolve(this.elements);
       }
       else {
-        console.log('FAIL');
         this.deferred.reject('FAIL');
       }
 
@@ -127,6 +128,9 @@ ImagesReady.prototype = {
   },
 
 
+  /**
+   *
+   */
   verify : function() {
     var images = this.images,
         i = -1,
@@ -137,28 +141,57 @@ ImagesReady.prototype = {
       image = images[i];
 
       if (image.complete && image.naturalWidth) {
-        console.log('complete:', image);
         this.loaded++;
         this.update();
       }
       else {
-        console.log('proxying:', image);
         this.proxy(image.src);
       }
     }
+  },
+
+
+  /**
+   *
+   */
+  clean : function() {
+    this.elements = null;
+    this.images = null;
+  },
+
+
+  /**
+   * {Element|Element[]|NodeList} object
+   * @returns {Element[]}
+   */
+  toArray : function(object) {
+    if (Array.isArray(object)) return object;
+
+    if (typeof object.length === 'number') {
+      return slice.call(object);
+    }
+
+    return [object];
   }
 
 };
 
 
+/*=========================================================
+  jQuery plugin
+=========================================================*/
+if (window.jQuery) {
+  $.fn.imagesReady = function() {
+    var imagesReady = new ImagesReady(this, {jquery: true}); // eslint-disable-line no-shadow
+    return imagesReady.result;
+  };
+}
 
-$.fn.imagesReady = function() {
-  var imagesReady = new ImagesReady(this, {jquery: true});
-  return imagesReady.result;
-};
 
-
-function imagesReady(elements) {
-  var instance = new ImagesReady(elements, {});
+/*=========================================================
+  Export conventional entry-point
+=========================================================*/
+function imagesReady(elements) { // eslint-disable-line no-unused-vars
+  var instance = new ImagesReady(elements);
   return instance.result;
 }
