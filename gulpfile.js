@@ -2,6 +2,7 @@ var browserSync = require('browser-sync'),
     bump = require('gulp-bump'),
     concat = require('gulp-concat'),
     del = require('del'),
+    eslint = require('gulp-eslint'),
     gulp = require('gulp'),
     header = require('gulp-header'),
     pkg = require('./package.json'),
@@ -52,9 +53,17 @@ gulp.task('sync', function server(){
 });
 
 
+gulp.task('lint', function(){
+  return gulp.src('./src/images-ready.js')
+    .pipe(eslint({useEslintrc: true}))
+    .pipe(eslint.format())
+    .pipe(eslint.failAfterError());
+});
+
+
 function build(options) {
   var headerTemplate = '/* <%= name %> v<%= version %> - <%= date %> */\n';
-  var headerContent = {name: pkg.name, version: pkg.version, date: new Date()};
+  var headerContent = {name: pkg.name, version: pkg.version, date: (new Date()).toISOString()};
   var umdHelper = function(){ return 'imagesReady'; };
 
   return gulp.src(options.src)
@@ -70,22 +79,22 @@ function build(options) {
 }
 
 
-gulp.task('build', function(){
+gulp.task('build', gulp.series('lint', function(){
   return build({
     src: './src/images-ready.js',
     outfile: 'images-ready.js',
     minOutfile: 'images-ready.min.js'
   });
-});
+}));
 
 
-gulp.task('build:promised', function(){
+gulp.task('build:promised', gulp.series('lint', function(){
   return build({
     src: ['./vendor/promise/browser-raw.js', './vendor/promise/core.js', './src/images-ready.js'],
     outfile: 'images-ready-promised.js',
     minOutfile: 'images-ready-promised.min.js'
   });
-});
+}));
 
 
 gulp.task('default', gulp.series('clean', 'copy', function watch(){
