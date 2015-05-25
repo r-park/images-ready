@@ -1,24 +1,32 @@
 # ImagesReady
-Promises/A+
+ImagesReady is a lightweight utility for detecting when images have been loaded. It supports promises and can be used with or without jQuery.
 
-## Getting Started
-#### bower
+## Browser Support
+- Chrome 
+- Firefox 
+- IE 9+ 
+- Safari
+
+## Installation
+**bower**
 ```
 bower install images-ready
 ```
-#### npm
+**npm**
 ```
 npm install images-ready --save
 ```
 
 ## Example
 ```javascript
-// handler for resolved promise
+// imagesready.min.js 3.2KB before gzip
+
+// handle resolved promise
 function resolved(elements) {
   console.log('Success:', elements);
 }
 
-// handler for rejected promise
+// handle rejected promise
 function rejected() {
   console.log('Error');
 }
@@ -30,17 +38,20 @@ imagesReady(elements).then(resolved, rejected);
 
 ## jQuery Example
 ```javascript
-// handler for resolved jQuery promise
+// jquery-imagesready.js 1.7KB before gzip
+
+// handle resolved jQuery promise
 function resolved(elements) {
   console.log('Success:', elements);
 }
 
-// handler for rejected jQuery promise
+// handle rejected jQuery promise
 function rejected() {
   console.log('Error');
 }
 
-$('.container')
-  .imagesReady()
-  .then(resolved, rejected);
+$('.container').imagesReady().then(resolved, rejected);
 ```
+
+## License
+ImagesReady is free to use under the [open-source MIT license](https://github.com/r-park/images-ready/blob/master/LICENSE).

@@ -1,14 +1,11 @@
 {
-  "name": "images-ready",
+  "name": "imagesready",
   "version": "0.1.0",
-  "description": "ImagesReady",
-
+  "description": "ImagesReady is a lightweight utility for detecting when images have been loaded. It supports promises and can be used with or without jQuery.",
+  "homepage": "https://github.com/r-park/images-ready",
   "devDependencies": {
     "jquery": "*"
   },
-
-  "keywords": [],
-
   "ignore": [
     "**/.*",
     "gulpfile.js",
@@ -19,7 +16,17 @@
     "tmp",
     "vendor"
   ],
-
+  "keywords": [
+    "images",
+    "imagesready",
+    "imagesloaded",
+    "load"
+  ],
+  "moduleType": [
+    "amd",
+    "globals",
+    "node"
+  ],
   "author": "Richard Park",
   "license": "MIT"
 }

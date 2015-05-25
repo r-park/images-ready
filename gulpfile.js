@@ -5,13 +5,31 @@ var browserSync = require('browser-sync'),
     eslint = require('gulp-eslint'),
     gulp = require('gulp'),
     header = require('gulp-header'),
-    pkg = require('./package.json'),
     rename = require('gulp-rename'),
     sourcemaps = require('gulp-sourcemaps'),
     uglify = require('gulp-uglify'),
     umd = require('gulp-umd');
 
 var manifests = ['./bower.json', './package.json'];
+
+var umdHelper = function(){ return 'imagesReady'; };
+
+
+
+gulp.task('build:jquery', function(){
+  return gulp.src('./src/imagesready.js')
+    .pipe(rename('jquery-imagesready.js'))
+    .pipe(umd({exports: umdHelper, namespace: umdHelper}))
+    .pipe(gulp.dest('./dist'));
+});
+
+
+gulp.task('build:regular', function(){
+  return gulp.src(['./vendor/asap/browser-raw.js', './vendor/promise/core.js', './src/imagesready.js'])
+    .pipe(concat('imagesready.js'))
+    .pipe(umd({exports: umdHelper, namespace: umdHelper}))
+    .pipe(gulp.dest('./dist'));
+});
 
 
 gulp.task('bump', function(){
@@ -28,7 +46,12 @@ gulp.task('bump:minor', function(){
 });
 
 
-gulp.task('clean', function clean(done){
+gulp.task('clean:dist', function clean(done){
+  del('./dist/*', done);
+});
+
+
+gulp.task('clean:target', function clean(done){
   del('./target/*', done);
 });
 
@@ -36,6 +59,25 @@ gulp.task('clean', function clean(done){
 gulp.task('copy', function copy(){
   return gulp.src(['./src/**/*.html', './src/**/*.js'])
     .pipe(gulp.dest('./target'));
+});
+
+
+gulp.task('headers', function(){
+  var pkg = require('./package.json');
+  var headerTemplate = '/* <%= name %> v<%= version %> - <%= date %> - <%= url %> */\n';
+  var headerContent = {date: (new Date()).toISOString(), name: pkg.name, version: pkg.version, url: pkg.homepage};
+
+  return gulp.src('./dist/*.js')
+    .pipe(header(headerTemplate, headerContent))
+    .pipe(gulp.dest('./dist'));
+});
+
+
+gulp.task('lint', function(){
+  return gulp.src('./src/imagesready.js')
+    .pipe(eslint({useEslintrc: true}))
+    .pipe(eslint.format())
+    .pipe(eslint.failAfterError());
 });
 
 
@@ -53,50 +95,25 @@ gulp.task('sync', function server(){
 });
 
 
-gulp.task('lint', function(){
-  return gulp.src('./src/images-ready.js')
-    .pipe(eslint({useEslintrc: true}))
-    .pipe(eslint.format())
-    .pipe(eslint.failAfterError());
+gulp.task('uglify', function(){
+  return gulp.src('./dist/*.js')
+    .pipe(rename(function(path){
+      path.basename += ".min";
+    }))
+    .pipe(sourcemaps.init())
+    .pipe(uglify())
+    .pipe(sourcemaps.write('./', {includeContent: true}))
+    .pipe(gulp.dest('./dist'));
 });
 
 
-function build(options) {
-  var headerTemplate = '/* <%= name %> v<%= version %> - <%= date %> */\n';
-  var headerContent = {name: pkg.name, version: pkg.version, date: (new Date()).toISOString()};
-  var umdHelper = function(){ return 'imagesReady'; };
-
-  return gulp.src(options.src)
-    .pipe(concat(options.outfile))
-    .pipe(umd({exports: umdHelper, namespace: umdHelper}))
-    .pipe(header(headerTemplate, headerContent))
-    .pipe(gulp.dest('./dist'))
-    .pipe(uglify({mangle: true}))
-    .pipe(sourcemaps.write('./', {includeContent: true}))
-    .pipe(rename(options.minOutfile))
-    .pipe(header(headerTemplate, headerContent))
-    .pipe(gulp.dest('./dist'));
-}
+gulp.task('build', gulp.series('lint', 'clean:dist', 'build:regular', 'build:jquery', 'uglify', 'headers'));
 
 
-gulp.task('build', gulp.series('lint', function(){
-  return build({
-    src: './src/images-ready.js',
-    outfile: 'images-ready.js',
-    minOutfile: 'images-ready.min.js'
-  });
-}));
+gulp.task('dist:patch', gulp.series('bump', 'build'));
+gulp.task('dist:minor', gulp.series('bump:minor', 'build'));
 
 
-gulp.task('build:promised', gulp.series('lint', function(){
-  return build({
-    src: ['./vendor/promise/browser-raw.js', './vendor/promise/core.js', './src/images-ready.js'],
-    outfile: 'images-ready-promised.js',
-    minOutfile: 'images-ready-promised.min.js'
-  });
-}));
-
-
-gulp.task('default', gulp.series('clean', 'copy', function watch(){
+gulp.task('default', gulp.series('clean:target', 'copy', function watch(){
   gulp.watch(['./src/**/*.html', './src/**/*.js'], gulp.task('copy'));
 }));
