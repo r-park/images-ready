@@ -3,7 +3,6 @@
 
 var slice = Array.prototype.slice;
 
-
 var validNodeTypes = {
   1  : true,
   9  : true,
@@ -77,8 +76,8 @@ ImagesReady.prototype = {
       }
       else if (element.nodeType && validNodeTypes[element.nodeType]) {
         imageElements = element.querySelectorAll('img');
-        if (imageElements.length) {
-          images.push.apply(images, slice.call(imageElements));
+        for (var n = 0, l = imageElements.length; n < l; ++n) {
+          images[n] = imageElements[n];
         }
       }
     }
@@ -189,7 +188,7 @@ if (window.jQuery) {
 
 
 /*=========================================================
-  Export conventional entry-point
+  Default entry-point
 =========================================================*/
 function imagesReady(elements) { // eslint-disable-line no-unused-vars
   var instance = new ImagesReady(elements);
