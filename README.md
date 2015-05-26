@@ -38,7 +38,7 @@ imagesReady(elements).then(resolved, rejected);
 
 ## jQuery Example
 ```javascript
-// jquery-imagesready.js
+// jquery-imagesready.min.js
 
 // handle resolved jQuery promise
 function resolved(elements) {
