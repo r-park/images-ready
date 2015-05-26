@@ -19,7 +19,7 @@ npm install images-ready --save
 
 ## Example
 ```javascript
-// imagesready.min.js 3.2KB before gzip
+// imagesready.min.js
 
 // handle resolved promise
 function resolved(elements) {
@@ -38,7 +38,7 @@ imagesReady(elements).then(resolved, rejected);
 
 ## jQuery Example
 ```javascript
-// jquery-imagesready.js 1.7KB before gzip
+// jquery-imagesready.js
 
 // handle resolved jQuery promise
 function resolved(elements) {
