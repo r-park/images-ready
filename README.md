@@ -1,20 +1,14 @@
 # ImagesReady
 ImagesReady is a lightweight utility for detecting when images have been loaded. It supports promises and can be used with or without jQuery.
 
-## Browser Support
-- Chrome 
-- Firefox 
-- IE 9+ 
-- Safari
-
 ## Installation
 **bower**
 ```
-bower install images-ready
+bower install imagesready
 ```
 **npm**
 ```
-npm install images-ready --save
+npm install imagesready --save
 ```
 
 ## Example
@@ -52,6 +46,17 @@ function rejected() {
 
 $('.container').imagesReady().then(resolved, rejected);
 ```
+
+## Browser Support
+- Chrome 
+- Firefox 
+- IE 9+ 
+- Safari
+
+## Module Support
+- AMD
+- CommonJS
+- Browser global
 
 ## License
 ImagesReady is free to use under the [open-source MIT license](https://github.com/r-park/images-ready/blob/master/LICENSE).
