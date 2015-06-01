@@ -3,11 +3,11 @@ ImagesReady is a lightweight utility for detecting when images have been loaded.
 
 ## Installation
 **bower**
-```
+```bash
 bower install imagesready
 ```
 **npm**
-```
+```bash
 npm install imagesready --save
 ```
 
