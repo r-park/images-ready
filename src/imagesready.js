@@ -93,15 +93,21 @@ ImagesReady.prototype = {
     var image = new Image(),
         that = this;
 
-    image.addEventListener('load', function(){
+    var cleanup = function() {
+      image.removeEventListener('load', onload);
+      image.removeEventListener('load', onerror);
+      image = null;
+    };
+
+    image.addEventListener('load', function onload(){
       that.loaded++;
       that.update();
-      image = null;
+      cleanup();
     });
 
-    image.addEventListener('error', function(){
+    image.addEventListener('error', function onerror(){
       that.update();
-      image = null;
+      cleanup();
     });
 
     image.src = imageSrc;
@@ -174,23 +180,3 @@ ImagesReady.prototype = {
   }
 
 };
-
-
-/*=========================================================
-  jQuery plugin
-=========================================================*/
-if (window.jQuery) {
-  $.fn.imagesReady = function() {
-    var imagesReady = new ImagesReady(this, {jquery: true}); // eslint-disable-line no-shadow
-    return imagesReady.result;
-  };
-}
-
-
-/*=========================================================
-  Default entry-point
-=========================================================*/
-function imagesReady(elements) { // eslint-disable-line no-unused-vars
-  var instance = new ImagesReady(elements);
-  return instance.result;
-}
