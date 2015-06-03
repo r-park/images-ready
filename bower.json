@@ -9,10 +9,12 @@
   "ignore": [
     "**/.*",
     "gulpfile.js",
+    "karma.conf.js",
     "node_modules",
     "package.json",
     "src",
     "target",
+    "test",
     "tmp",
     "vendor"
   ],
