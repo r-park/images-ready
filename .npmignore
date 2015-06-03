@@ -2,8 +2,10 @@
 # Directories
 #---------------------------------
 **/node_modules/
+bower_components/
 coverage/
 target/
+test/
 tmp/
 
 
@@ -16,8 +18,11 @@ tmp/
 #---------------------------------
 # Files
 #---------------------------------
+.eslintrc
+.travis.yml
 bower.json
 gulpfile.js
+karma.conf.js
 
 
 #---------------------------------
