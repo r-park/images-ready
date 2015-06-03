@@ -1,4 +1,4 @@
-/* imagesready v0.1.1 - 2015-06-03T01:44:09.372Z - https://github.com/r-park/images-ready */
+/* imagesready v0.1.2 - 2015-06-03T02:23:17.610Z - https://github.com/r-park/images-ready */
 (function(root, factory) {
   if (typeof define === 'function' && define.amd) {
     define([], factory);
