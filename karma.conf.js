@@ -33,7 +33,7 @@ module.exports = function(config) {
       'vendor/promise/core.js',
       'src/imagesready.js',
       'test/fixtures/*',
-      'test/images/*',
+      {pattern: 'test/images/*', watched: false, included: false, served: true},
       'test/imagesready.spec.js'
     ],
 
