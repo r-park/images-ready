@@ -1,14 +1,16 @@
 var browserSync = require('browser-sync'),
-    bump = require('gulp-bump'),
-    concat = require('gulp-concat'),
-    del = require('del'),
-    eslint = require('gulp-eslint'),
-    gulp = require('gulp'),
-    header = require('gulp-header'),
-    rename = require('gulp-rename'),
-    sourcemaps = require('gulp-sourcemaps'),
-    uglify = require('gulp-uglify'),
-    umd = require('gulp-umd');
+    bump        = require('gulp-bump'),
+    concat      = require('gulp-concat'),
+    coveralls   = require('gulp-coveralls'),
+    del         = require('del'),
+    eslint      = require('gulp-eslint'),
+    gulp        = require('gulp'),
+    header      = require('gulp-header'),
+    karma       = require('karma').server,
+    rename      = require('gulp-rename'),
+    sourcemaps  = require('gulp-sourcemaps'),
+    uglify      = require('gulp-uglify'),
+    umd         = require('gulp-umd');
 
 var manifests = ['./bower.json', './package.json'];
 
@@ -62,6 +64,12 @@ gulp.task('copy', function copy(){
 });
 
 
+gulp.task('coveralls', function() {
+  return gulp.src('./coverage/**/lcov.info')
+    .pipe(coveralls());
+});
+
+
 gulp.task('headers', function(){
   var pkg = require('./package.json');
   var headerTemplate = '/* <%= name %> v<%= version %> - <%= date %> - <%= url %> */\n';
@@ -95,6 +103,11 @@ gulp.task('sync', function server(){
 });
 
 
+gulp.task('test', function(done){
+  karma.start({configFile: __dirname + '/karma.conf.js'}, done);
+});
+
+
 gulp.task('uglify', function(){
   return gulp.src('./dist/*.js')
     .pipe(rename(function(path){
@@ -107,13 +120,8 @@ gulp.task('uglify', function(){
 });
 
 
-gulp.task('build', gulp.series('lint', 'clean:dist', 'build:regular', 'build:jquery', 'uglify', 'headers'));
+gulp.task('build', gulp.series('lint', 'test', 'clean:dist', 'build:regular', 'build:jquery', 'uglify', 'headers'));
 
 
 gulp.task('dist:patch', gulp.series('bump', 'build'));
 gulp.task('dist:minor', gulp.series('bump:minor', 'build'));
-
-
-gulp.task('default', gulp.series('clean:target', 'copy', function watch(){
-  gulp.watch(['./src/**/*.html', './src/**/*.js'], gulp.task('copy'));
-}));
