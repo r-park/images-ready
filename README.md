@@ -15,10 +15,17 @@ npm install imagesready
 ```
 
 ## Example
-Add ImagesReady and setup your HTML
+Add ImagesReady (non-jQuery)
 ```html
 <script src="imagesready.min.js"></script>
-
+```
+Add ImagesReady (jQuery – do not add `imagesready.min.js`)
+```html
+<script src="jquery.min.js"></script>
+<script src="jquery-imagesready.min.js"></script>
+```
+Example HTML – ImagesReady will check all images within `container`
+```html
 <div class="container">
   <img src="foo.jpg">
   <div>
@@ -27,28 +34,26 @@ Add ImagesReady and setup your HTML
   </div>
 </div>
 ```
+Setup promise handlers
 ```javascript
-// handle fulfilled promise – triggered when all images have loaded
+// handle fulfilled promise – triggered 
+// when all images have loaded
 function ready(elements) {
   console.log('Images are ready:', elements);
 }
 
-// handle rejected promise – triggered when one or more images fail to load
+// handle rejected promise – triggered 
+// when one or more images fail to load
 function error() {
   console.log('Error');
 }
-
+```
+Invoke ImagesReady (non-jQuery)
+```javascript
 var container = document.querySelector('.container');
-
 imagesReady(container).then(ready, error);
 ```
-
-## jQuery Example
-Add jQuery and the plugin version of ImagesReady to your HTML. Do not add `imagesready.min.js`.
-```html
-<script src="jquery.min.js"></script>
-<script src="jquery-imagesready.min.js"></script>
-```
+Invoke ImagesReady (jQuery)
 ```javascript
 $('.container').imagesReady().then(ready, error);
 ```
