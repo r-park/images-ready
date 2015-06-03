@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/r-park/images-ready.svg?branch=master)](https://travis-ci.org/r-park/images-ready)
+[![Coverage Status](https://coveralls.io/repos/r-park/images-ready/badge.svg?branch=master)](https://coveralls.io/r/r-park/images-ready?branch=master)
+
 # ImagesReady
 ImagesReady is a lightweight utility for detecting when images have been loaded. It supports promises and can be used with or without jQuery.
 
