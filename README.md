@@ -11,13 +11,15 @@ bower install imagesready
 ```
 **npm**
 ```bash
-npm install imagesready --save
+npm install imagesready
 ```
 
 ## Example
+Add the non-jQuery version of ImagesReady to your HTML
+```html
+<script src="imagesready.min.js"></script>
+```
 ```javascript
-// imagesready.min.js
-
 // handle fulfilled promise
 function ready(elements) {
   console.log('Success:', elements);
@@ -34,9 +36,12 @@ imagesReady(elements).then(ready, error);
 ```
 
 ## jQuery Example
+Add jQuery and the plugin version of ImagesReady to your HTML
+```html
+<script src="jquery.min.js"></script>
+<script src="jquery-imagesready.min.js"></script>
+```
 ```javascript
-// jquery-imagesready.min.js
-
 // handle fulfilled jQuery promise
 function ready(elements) {
   console.log('Success:', elements);
