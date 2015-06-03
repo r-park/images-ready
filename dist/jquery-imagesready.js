@@ -1,4 +1,4 @@
-/* imagesready v0.1.0 - 2015-06-01T03:14:03.707Z - https://github.com/r-park/images-ready */
+/* imagesready v0.1.1 - 2015-06-03T01:44:09.372Z - https://github.com/r-park/images-ready */
 (function(root, factory) {
   if (typeof define === 'function' && define.amd) {
     define([], factory);
@@ -14,9 +14,9 @@
 var slice = Array.prototype.slice;
 
 var validNodeTypes = {
-  1  : true,
-  9  : true,
-  11 : true
+  1  : true, // ELEMENT_NODE
+  9  : true, // DOCUMENT_NODE
+  11 : true  // DOCUMENT_FRAGMENT_NODE
 };
 
 
@@ -34,13 +34,16 @@ function defer() {
  * @name ImagesReady
  * @constructor
  *
- * @param {Element|Element[]|jQuery|NodeList|string} elements
+ * @param {DocumentFragment|Element|Element[]|jQuery|NodeList|string} elements
  *
  * @param {{}}      [options]
+ * @param {boolean} [options.auto]
  * @param {boolean} [options.jquery]
  *
  */
 function ImagesReady(elements, options) {
+  options = options || {};
+
   if (typeof elements === 'string') {
     elements = document.querySelectorAll(elements);
   }
@@ -61,7 +64,9 @@ function ImagesReady(elements, options) {
   this.loaded = 0;
   this.verified = 0;
 
-  this.verify();
+  if (options.auto !== false) {
+    this.verify();
+  }
 }
 
 
@@ -93,34 +98,6 @@ ImagesReady.prototype = {
     }
 
     return images;
-  },
-
-
-  /**
-   * @param {string} imageSrc
-   */
-  proxy : function(imageSrc) {
-    var image = new Image(),
-        that = this;
-
-    var cleanup = function() {
-      image.removeEventListener('load', onload);
-      image.removeEventListener('load', onerror);
-      image = null;
-    };
-
-    image.addEventListener('load', function onload(){
-      that.loaded++;
-      that.update();
-      cleanup();
-    });
-
-    image.addEventListener('error', function onerror(){
-      that.update();
-      cleanup();
-    });
-
-    image.src = imageSrc;
   },
 
 
@@ -160,9 +137,37 @@ ImagesReady.prototype = {
         this.update();
       }
       else {
-        this.proxy(image.src);
+        this.verifyByProxy(image.src);
       }
     }
+  },
+
+
+  /**
+   * @param {string} imageSrc
+   */
+  verifyByProxy : function(imageSrc) {
+    var image = new Image(),
+        that = this;
+
+    var cleanup = function() {
+      image.removeEventListener('load', onload);
+      image.removeEventListener('load', onerror);
+      image = null;
+    };
+
+    image.addEventListener('load', function onload(){
+      that.loaded++;
+      that.update();
+      cleanup();
+    });
+
+    image.addEventListener('error', function onerror(){
+      that.update();
+      cleanup();
+    });
+
+    image.src = imageSrc;
   },
 
 
@@ -197,14 +202,14 @@ ImagesReady.prototype = {
 =========================================================*/
 if (window.jQuery) {
   $.fn.imagesReady = function() {
-    var imagesReady = new ImagesReady(this, {jquery: true}); // eslint-disable-line no-shadow
-    return imagesReady.result;
+    var instance = new ImagesReady(this, {jquery: true}); // eslint-disable-line no-shadow
+    return instance.result;
   };
 }
 
 
 /*=========================================================
-  Default entry-point
+  Default entry point
 =========================================================*/
 function imagesReady(elements) { // eslint-disable-line no-unused-vars
   var instance = new ImagesReady(elements);

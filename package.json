@@ -1,17 +1,15 @@
 {
   "name": "imagesready",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "ImagesReady is a lightweight utility for detecting when images have been loaded. It supports promises and can be used with or without jQuery.",
   "homepage": "https://github.com/r-park/images-ready",
   "repository": "https://github.com/r-park/images-ready.git",
   "author": "Richard Park",
   "license": "MIT",
-
   "scripts": {
     "test": "./node_modules/karma/bin/karma start --single-run --coverage",
     "coveralls": "gulp coveralls && rm -rf ./coverage"
   },
-
   "devDependencies": {
     "asap": "^2.0.3",
     "browser-sync": "^2.7.6",
@@ -39,7 +37,6 @@
     "promise": "^7.0.1",
     "sinon": "^1.14.1"
   },
-
   "keywords": [
     "images",
     "imagesready",
