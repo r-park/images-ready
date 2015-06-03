@@ -15,36 +15,36 @@ npm install imagesready --save
 ```javascript
 // imagesready.min.js
 
-// handle resolved promise
-function resolved(elements) {
+// handle fulfilled promise
+function ready(elements) {
   console.log('Success:', elements);
 }
 
 // handle rejected promise
-function rejected() {
+function error() {
   console.log('Error');
 }
 
 var elements = document.querySelector('.container');
 
-imagesReady(elements).then(resolved, rejected);
+imagesReady(elements).then(ready, error);
 ```
 
 ## jQuery Example
 ```javascript
 // jquery-imagesready.min.js
 
-// handle resolved jQuery promise
-function resolved(elements) {
+// handle fulfilled jQuery promise
+function ready(elements) {
   console.log('Success:', elements);
 }
 
 // handle rejected jQuery promise
-function rejected() {
+function error() {
   console.log('Error');
 }
 
-$('.container').imagesReady().then(resolved, rejected);
+$('.container').imagesReady().then(ready, error);
 ```
 
 ## Browser Support
