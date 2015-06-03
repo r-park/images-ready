@@ -7,10 +7,6 @@
   "author": "Richard Park",
   "license": "MIT",
 
-  "devDependencies": {
-    "jquery": "*"
-  },
-
   "ignore": [
     "**/.*",
     "gulpfile.js",
