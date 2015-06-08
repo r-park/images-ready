@@ -265,15 +265,11 @@ describe("ImagesReady", function(){
 
     it("should fulfill promise with provided elements", function(done){
       var elements = document.querySelectorAll('.container');
-      var elementCount = elements.length;
       var imagesReady = new ImagesReady(elements);
 
       imagesReady.result.then(
         function(_elements_){
-          expect(_elements_.length).toBe(elementCount);
-          for (var i = 0; i < elementCount; ++i) {
-            expect(_elements_.indexOf(elements[i])).not.toBe(-1);
-          }
+          expect(_elements_).toBe(elements);
           done();
         },
         function(){

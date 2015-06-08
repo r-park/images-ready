@@ -38,6 +38,7 @@ function ImagesReady(elements, options) {
     elements = document.querySelectorAll(elements);
   }
 
+  this.providedElements = elements;
   this.elements = this.toArray(elements);
   this.images = this.findImageElements(this.elements);
 
@@ -99,7 +100,7 @@ ImagesReady.prototype = {
 
     if (this.total === this.verified) {
       if (this.total === this.loaded) {
-        this.deferred.resolve(this.elements);
+        this.deferred.resolve(this.providedElements);
       }
       else {
         this.deferred.reject('FAIL');
