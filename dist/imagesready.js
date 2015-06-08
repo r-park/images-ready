@@ -1,4 +1,4 @@
-/* imagesready v0.1.4 - 2015-06-03T08:56:00.959Z - https://github.com/r-park/images-ready */
+/* imagesready v0.1.5 - 2015-06-08T02:37:36.896Z - https://github.com/r-park/images-ready */
 (function(root, factory) {
   if (typeof define === 'function' && define.amd) {
     define([], factory);
@@ -454,6 +454,7 @@ function ImagesReady(elements, options) {
     elements = document.querySelectorAll(elements);
   }
 
+  this.providedElements = elements;
   this.elements = this.toArray(elements);
   this.images = this.findImageElements(this.elements);
 
@@ -498,7 +499,7 @@ ImagesReady.prototype = {
       else if (element.nodeType && validNodeTypes[element.nodeType]) {
         imageElements = element.querySelectorAll('img');
         for (var n = 0, l = imageElements.length; n < l; ++n) {
-          images[n] = imageElements[n];
+          images.push(imageElements[n]);
         }
       }
     }
@@ -515,7 +516,7 @@ ImagesReady.prototype = {
 
     if (this.total === this.verified) {
       if (this.total === this.loaded) {
-        this.deferred.resolve(this.elements);
+        this.deferred.resolve(this.providedElements);
       }
       else {
         this.deferred.reject('FAIL');
