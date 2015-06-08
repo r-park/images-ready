@@ -82,7 +82,7 @@ ImagesReady.prototype = {
       else if (element.nodeType && validNodeTypes[element.nodeType]) {
         imageElements = element.querySelectorAll('img');
         for (var n = 0, l = imageElements.length; n < l; ++n) {
-          images[n] = imageElements[n];
+          images.push(imageElements[n]);
         }
       }
     }

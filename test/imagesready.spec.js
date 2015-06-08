@@ -152,6 +152,19 @@ describe("ImagesReady", function(){
     });
 
 
+    it("should return an array of {HTMLImageElement} that are children of multiple elements", function(){
+      var elements = [
+        document.querySelector('#container-1'),
+        document.querySelector('#container-2')
+      ];
+
+      var imagesReady = new ImagesReady('.empty', {auto: false});
+      var foundImages = imagesReady.findImageElements(elements);
+
+      expect(foundImages.length).toBe(4);
+    });
+
+
     it("should return an array of provided {HTMLImageElement}", function(){
       var images = document.querySelectorAll('.image');
       var imagesReady = new ImagesReady('.empty', {auto: false});
