@@ -1,4 +1,4 @@
-/* imagesready v0.1.5 - 2015-06-08T02:37:36.896Z - https://github.com/r-park/images-ready */
+/* imagesready v0.1.6 - 2015-06-12T00:05:03.311Z - https://github.com/r-park/images-ready */
 (function(root, factory) {
   if (typeof define === 'function' && define.amd) {
     define([], factory);
@@ -113,7 +113,7 @@ ImagesReady.prototype = {
         this.deferred.resolve(this.providedElements);
       }
       else {
-        this.deferred.reject('FAIL');
+        this.deferred.reject(this.providedElements);
       }
 
       this.clean();
@@ -178,6 +178,7 @@ ImagesReady.prototype = {
   clean : function() {
     this.elements = null;
     this.images = null;
+    this.providedElements = null;
   },
 
 
