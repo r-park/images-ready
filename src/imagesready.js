@@ -103,7 +103,7 @@ ImagesReady.prototype = {
         this.deferred.resolve(this.providedElements);
       }
       else {
-        this.deferred.reject('FAIL');
+        this.deferred.reject(this.providedElements);
       }
 
       this.clean();
@@ -168,6 +168,7 @@ ImagesReady.prototype = {
   clean : function() {
     this.elements = null;
     this.images = null;
+    this.providedElements = null;
   },
 
 

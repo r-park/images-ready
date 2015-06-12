@@ -7,16 +7,16 @@
   "author": "Richard Park",
   "license": "MIT",
   "ignore": [
-    "**/.*",
-    "gulpfile.js",
-    "karma.conf.js",
     "node_modules",
-    "package.json",
     "src",
     "target",
     "test",
     "tmp",
-    "vendor"
+    "vendor",
+    "**/.*",
+    "gulpfile.js",
+    "karma.conf.js",
+    "package.json"
   ],
   "keywords": [
     "images",
