@@ -2,8 +2,6 @@
 # Directories
 #---------------------------------
 **/node_modules/
-bower_components/
-coverage/
 target/
 tmp/
 
