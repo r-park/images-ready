@@ -25,7 +25,7 @@ function ImagesReady(elements, options) {
   if (typeof elements === 'string') {
     elements = document.querySelectorAll(elements);
     if (!elements.length) {
-      throw new Error('0 elements were found using selector `'+ elements +'`');
+      throw new Error('0 elements were found using selector `' + elements + '`');
     }
   }
 
