@@ -157,7 +157,7 @@ ImagesReady.prototype = {
 
     var cleanup = function() {
       image.removeEventListener('load', onload);
-      image.removeEventListener('load', onerror);
+      image.removeEventListener('error', onerror);
       image = null;
     };
 
