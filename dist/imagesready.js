@@ -1,4 +1,4 @@
-/* imagesready v0.1.8 - 2015-06-13T01:21:18.035Z - https://github.com/r-park/images-ready */
+/* imagesready v0.1.9 - 2015-06-13T01:30:13.459Z - https://github.com/r-park/images-ready */
 ;(function(root, factory) {
   if (typeof define === 'function' && define.amd) {
     define([], factory);
@@ -598,7 +598,6 @@ ImagesReady.prototype = {
   clean : function() {
     this.elements = null;
     this.images = null;
-    this.providedElements = null;
   },
 
 
