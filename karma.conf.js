@@ -21,19 +21,18 @@ module.exports = function(config) {
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['jasmine'],
+    frameworks: ['jasmine', 'fixture'],
 
 
     // list of files / patterns to load in the browser
     files: [
       'node_modules/jquery/dist/jquery.js',
-      'node_modules/jasmine-jquery/lib/jasmine-jquery.js',
       'node_modules/sinon/pkg/sinon.js',
       'vendor/asap/browser-raw.js',
       'vendor/promise/core.js',
       'src/imagesready.js',
-      'test/fixtures/*',
       {pattern: 'test/images/*', watched: false, included: false, served: true},
+      'test/*.html',
       'test/imagesready.spec.js'
     ],
 
@@ -44,7 +43,9 @@ module.exports = function(config) {
 
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
-    preprocessors: {},
+    preprocessors: {
+      'test/*.html': ['html2js']
+    },
 
 
     // test results reporter to use
