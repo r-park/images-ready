@@ -23,6 +23,7 @@
     "imagesready",
     "imagesloaded",
     "load",
+    "loaded",
     "onload"
   ],
   "moduleType": [

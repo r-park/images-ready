@@ -43,6 +43,7 @@
     "imagesready",
     "imagesloaded",
     "load",
+    "loaded",
     "onload"
   ]
 }
