@@ -1,4 +1,4 @@
-/* imagesready v0.1.9 - 2015-06-13T01:30:13.459Z - https://github.com/r-park/images-ready */
+/* imagesready v0.1.10 - 2015-06-13T10:57:46.544Z - https://github.com/r-park/images-ready */
 ;(function(root, factory) {
   if (typeof define === 'function' && define.amd) {
     define([], factory);
@@ -167,7 +167,7 @@ ImagesReady.prototype = {
 
     var cleanup = function() {
       image.removeEventListener('load', onload);
-      image.removeEventListener('load', onerror);
+      image.removeEventListener('error', onerror);
       image = null;
     };
 
