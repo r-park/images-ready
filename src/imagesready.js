@@ -1,23 +1,11 @@
 'use strict';
 
 
-var slice = Array.prototype.slice;
-
 var validNodeTypes = {
   1  : true, // ELEMENT_NODE
   9  : true, // DOCUMENT_NODE
   11 : true  // DOCUMENT_FRAGMENT_NODE
 };
-
-
-function defer() {
-  var deferred = {};
-  deferred.promise = new Promise(function(resolve, reject){
-    deferred.resolve = resolve;
-    deferred.reject = reject;
-  });
-  return deferred;
-}
 
 
 /**
@@ -27,7 +15,7 @@ function defer() {
  * @param {DocumentFragment|Element|Element[]|jQuery|NodeList|string} elements
  *
  * @param {{}}      [options]
- * @param {boolean} [options.auto]
+ * @param {boolean} [options.auto] - used for testing only
  * @param {boolean} [options.jquery]
  *
  */
@@ -36,33 +24,60 @@ function ImagesReady(elements, options) {
 
   if (typeof elements === 'string') {
     elements = document.querySelectorAll(elements);
+    if (!elements.length) {
+      throw new Error('0 elements were found using selector `'+ elements +'`');
+    }
   }
 
-  this.providedElements = elements;
-  this.elements = this.toArray(elements);
-  this.images = this.findImageElements(this.elements);
+  var images = this.findImageElements(this.toList(elements));
+  var total = images.length;
 
-  if (options && options.jquery) {
-    this.deferred = new $.Deferred();
-    this.result = this.deferred.promise();
+  this.defer(options.jquery);
+
+  if (images.length) {
+    this.elements = elements;
+    this.images = images;
+    this.total = total;
+    this.loaded = 0;
+    this.verified = 0;
+
+    if (options.auto !== false) {
+      this.verify();
+    }
   }
   else {
-    this.deferred = defer();
-    this.result = this.deferred.promise;
-  }
-
-  this.total = this.images.length;
-  this.loaded = 0;
-  this.verified = 0;
-
-  if (options.auto !== false) {
-    this.verify();
+    this.deferred.resolve(elements);
   }
 }
 
 
-
 ImagesReady.prototype = {
+
+  /**
+   * @param {boolean} jquery
+   */
+  defer : function(jquery) {
+    var deferred,
+        result;
+
+    if (jquery) {
+      deferred = new $.Deferred();
+      result = deferred.promise();
+    }
+    else {
+      deferred = {};
+      deferred.promise = new Promise(function(resolve, reject){
+        deferred.resolve = resolve;
+        deferred.reject = reject;
+      });
+
+      result = deferred.promise;
+    }
+
+    this.deferred = deferred;
+    this.result = result;
+  },
+
 
   /**
    * @param {Element[]} elements
@@ -80,7 +95,7 @@ ImagesReady.prototype = {
       if (element.nodeName === 'IMG') {
         images.push(element);
       }
-      else if (element.nodeType && validNodeTypes[element.nodeType]) {
+      else if (validNodeTypes[element.nodeType]) {
         imageElements = element.querySelectorAll('img');
         for (var n = 0, l = imageElements.length; n < l; ++n) {
           images.push(imageElements[n]);
@@ -100,10 +115,10 @@ ImagesReady.prototype = {
 
     if (this.total === this.verified) {
       if (this.total === this.loaded) {
-        this.deferred.resolve(this.providedElements);
+        this.deferred.resolve(this.elements);
       }
       else {
-        this.deferred.reject(this.providedElements);
+        this.deferred.reject(this.elements);
       }
 
       this.clean();
@@ -116,11 +131,10 @@ ImagesReady.prototype = {
    */
   verify : function() {
     var images = this.images,
-        i = -1,
-        l = images.length,
+        i = images.length,
         image;
 
-    while (++i < l) {
+    while (i--) {
       image = images[i];
 
       if (image.complete && image.naturalWidth) {
@@ -173,16 +187,11 @@ ImagesReady.prototype = {
 
 
   /**
-   * {Element|Element[]|NodeList} object
-   * @returns {Element[]}
+   * @param {Element|Element[]|jQuery|NodeList} object
+   * @returns {Element[]|jQuery|NodeList}
    */
-  toArray : function(object) {
-    if (Array.isArray(object)) return object;
-
-    if (typeof object.length === 'number') {
-      return slice.call(object);
-    }
-
+  toList : function(object) {
+    if (typeof object.length === 'number') return object;
     return [object];
   }
 
