@@ -182,7 +182,6 @@ ImagesReady.prototype = {
   clean : function() {
     this.elements = null;
     this.images = null;
-    this.providedElements = null;
   },
 
 
