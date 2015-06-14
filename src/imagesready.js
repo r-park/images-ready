@@ -202,7 +202,7 @@ ImagesReady.prototype = {
 =========================================================*/
 if (window.jQuery) {
   $.fn.imagesReady = function() {
-    var instance = new ImagesReady(this, {jquery: true}); // eslint-disable-line no-shadow
+    var instance = new ImagesReady(this, {jquery: true});
     return instance.result;
   };
 }
