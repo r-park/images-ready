@@ -40,14 +40,14 @@ Example HTML – ImagesReady will check all images within `container`
 ```
 Setup promise handlers. Both fulfilled and rejected handlers will be passed the `elements` that are provided to ImagesReady.
 ```javascript
-// handle fulfilled promise – triggered 
+// handle fulfilled promise – triggered
 // when all images have loaded
 function ready(elements) {
   console.log('Images are ready');
   // do something with elements
 }
 
-// handle rejected promise – triggered 
+// handle rejected promise – triggered
 // when one or more images fail to load
 function error(elements) {
   console.log('Error');
@@ -56,20 +56,20 @@ function error(elements) {
 ```
 Invoke ImagesReady (non-jQuery)
 ```javascript
-var elements = document.querySelector('.container');
+var elements = document.querySelectorAll('.container');
 imagesReady(elements).then(ready, error);
-// `elements` will be passed to both `ready` and `error` handlers 
+// `elements` will be passed to both `ready` and `error` handlers
 ```
 Invoke ImagesReady (jQuery)
 ```javascript
 $('.container').imagesReady().then(ready, error);
-// $('.container') will be passed to both `ready` and `error` handlers 
+// $('.container') will be passed to both `ready` and `error` handlers
 ```
 
 ## Browser Support
-- Chrome 
-- Firefox 
-- IE 9+ 
+- Chrome
+- Firefox
+- IE 9+
 - Safari
 
 ## Module Support
