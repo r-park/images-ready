@@ -1,7 +1,7 @@
 'use strict';
 
 
-var validNodeTypes = {
+var VALID_NODE_TYPES = {
   1  : true, // ELEMENT_NODE
   9  : true, // DOCUMENT_NODE
   11 : true  // DOCUMENT_FRAGMENT_NODE
@@ -95,7 +95,7 @@ ImagesReady.prototype = {
       if (element.nodeName === 'IMG') {
         images.push(element);
       }
-      else if (validNodeTypes[element.nodeType]) {
+      else if (VALID_NODE_TYPES[element.nodeType]) {
         imageElements = element.querySelectorAll('img');
         for (var n = 0, l = imageElements.length; n < l; ++n) {
           images.push(imageElements[n]);

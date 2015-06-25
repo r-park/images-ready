@@ -7,8 +7,8 @@
   "author": "Richard Park",
   "license": "MIT",
   "scripts": {
-    "test": "./node_modules/karma/bin/karma start --single-run --coverage",
-    "coveralls": "gulp coveralls && rm -rf ./tmp"
+    "coveralls": "gulp coveralls && rm -rf ./tmp",
+    "test": "./node_modules/karma/bin/karma start --single-run --coverage"
   },
   "devDependencies": {
     "asap": "^2.0.3",
