@@ -2,34 +2,39 @@
 
 
 /**
- * @param {number} total
+ * @param {number} imageCount
  * @param {function} done
- * @returns {{update: function}}
+ * @returns {{failed: function, loaded: function}}
  */
-function status(total, done) {
-  var status = {
-    loaded: 0,
-    total: total,
-    verified: 0
-  };
+function status(imageCount, done) {
+  var loaded = 0,
+      total = imageCount,
+      verified = 0;
+
+  function update() {
+    if (total === verified) {
+      done(total === loaded);
+    }
+  }
 
   return {
 
     /**
-     * @param {number} loaded
+     * @param {number} count
      */
-    update : function(loaded) {
-      if (loaded) {
-        status.loaded += loaded;
-        status.verified += loaded;
-      }
-      else {
-        status.verified++;
-      }
+    failed : function(count) {
+      verified += count;
+      update();
+    },
 
-      if (status.total === status.verified) {
-        done(status);
-      }
+
+    /**
+     * @param {number} count
+     */
+    loaded : function(count) {
+      loaded += count;
+      verified += count;
+      update();
     }
 
   };
@@ -62,8 +67,8 @@ function ImagesReady(elements, options) {
   var imageCount = images.length;
 
   if (imageCount) {
-    this.verify(images, status(imageCount, function(status){
-      if (status.total === status.loaded) {
+    this.verify(images, status(imageCount, function(ready){
+      if (ready) {
         deferred.resolve(elements);
       }
       else {
@@ -177,22 +182,22 @@ ImagesReady.prototype = {
 
   /**
    * @param {HTMLImageElement[]} images
-   * @param {{update: function}} status
+   * @param {{failed: function, loaded: function}} status
    */
   verify : function(images, status) {
     var incomplete = this.incompleteImages(images);
 
-    if (images.length !== incomplete.length) {
-      status.update(images.length - incomplete.length);
+    if (images.length > incomplete.length) {
+      status.loaded(images.length - incomplete.length);
     }
 
     if (incomplete.length) {
       incomplete.forEach(this.proxyImage(
         function(){
-          status.update(1);
+          status.loaded(1);
         },
         function(){
-          status.update(0);
+          status.failed(1);
         }
       ));
     }

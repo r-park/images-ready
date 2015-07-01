@@ -56,7 +56,8 @@ describe("ImagesReady", function(){
       var imagesReady = new ImagesReady('#content-1');
       var statusArg = imagesReady.verify.args[0][1];
 
-      expect(typeof statusArg.update).toBe('function');
+      expect(typeof statusArg.failed).toBe('function');
+      expect(typeof statusArg.loaded).toBe('function');
 
       ImagesReady.prototype.verify.restore();
     });
