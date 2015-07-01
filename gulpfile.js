@@ -34,13 +34,6 @@ gulp.task('build:regular', function(){
 });
 
 
-gulp.task('bump:patch', function(){
-  return gulp.src(manifests)
-    .pipe(bump({type: 'patch'}))
-    .pipe(gulp.dest('./'));
-});
-
-
 gulp.task('bump:minor', function(){
   return gulp.src(manifests)
     .pipe(bump({type: 'minor'}))
@@ -48,19 +41,15 @@ gulp.task('bump:minor', function(){
 });
 
 
+gulp.task('bump:patch', function(){
+  return gulp.src(manifests)
+    .pipe(bump({type: 'patch'}))
+    .pipe(gulp.dest('./'));
+});
+
+
 gulp.task('clean:dist', function clean(done){
   del('./dist/*', done);
-});
-
-
-gulp.task('clean:target', function clean(done){
-  del('./target/*', done);
-});
-
-
-gulp.task('copy', function copy(){
-  return gulp.src(['./src/**/*.html', './src/**/*.js'])
-    .pipe(gulp.dest('./target'));
 });
 
 
@@ -93,8 +82,8 @@ gulp.task('sync', function server(){
   browserSync
     .create()
     .init({
-      browser: 'firefox',
-      files: ['examples/**/*', 'src/**/*', 'target/**/*', 'vendor/**/*'],
+      browser: 'firefox developer edition',
+      files: ['examples/**/*', 'src/**/*', 'vendor/**/*'],
       port: 7000,
       server: {
         baseDir: '.'
@@ -122,6 +111,6 @@ gulp.task('uglify', function(){
 
 gulp.task('build', gulp.series('lint', 'test', 'clean:dist', 'build:regular', 'build:jquery', 'uglify', 'headers'));
 
+gulp.task('dist:minor', gulp.series('bump:minor', 'build'));
 
 gulp.task('dist:patch', gulp.series('bump:patch', 'build'));
-gulp.task('dist:minor', gulp.series('bump:minor', 'build'));
