@@ -1,4 +1,4 @@
-/* imagesready v0.1.10 - 2015-06-13T10:57:46.544Z - https://github.com/r-park/images-ready */
+/* imagesready v0.2.0 - 2015-07-01T07:12:43.929Z - https://github.com/r-park/images-ready */
 ;(function(root, factory) {
   if (typeof define === 'function' && define.amd) {
     define([], factory);
@@ -231,6 +231,7 @@ rawAsap.makeRequestCallFromTimer = makeRequestCallFromTimer;
 
 'use strict';
 
+//var asap = require('asap/raw');
 var asap = rawAsap;
 
 function noop() {}
@@ -289,13 +290,13 @@ function Promise(fn) {
   if (typeof fn !== 'function') {
     throw new TypeError('not a function');
   }
-  this._state = 0;
-  this._value = null;
-  this._deferreds = [];
+  this._41 = 0;
+  this._86 = null;
+  this._17 = [];
   if (fn === noop) return;
   doResolve(fn, this);
 }
-Promise._noop = noop;
+Promise._1 = noop;
 
 Promise.prototype.then = function(onFulfilled, onRejected) {
   if (this.constructor !== Promise) {
@@ -314,24 +315,24 @@ function safeThen(self, onFulfilled, onRejected) {
   });
 };
 function handle(self, deferred) {
-  while (self._state === 3) {
-    self = self._value;
+  while (self._41 === 3) {
+    self = self._86;
   }
-  if (self._state === 0) {
-    self._deferreds.push(deferred);
+  if (self._41 === 0) {
+    self._17.push(deferred);
     return;
   }
   asap(function() {
-    var cb = self._state === 1 ? deferred.onFulfilled : deferred.onRejected;
+    var cb = self._41 === 1 ? deferred.onFulfilled : deferred.onRejected;
     if (cb === null) {
-      if (self._state === 1) {
-        resolve(deferred.promise, self._value);
+      if (self._41 === 1) {
+        resolve(deferred.promise, self._86);
       } else {
-        reject(deferred.promise, self._value);
+        reject(deferred.promise, self._86);
       }
       return;
     }
-    var ret = tryCallOne(cb, self._value);
+    var ret = tryCallOne(cb, self._86);
     if (ret === IS_ERROR) {
       reject(deferred.promise, LAST_ERROR);
     } else {
@@ -359,8 +360,8 @@ function resolve(self, newValue) {
       then === self.then &&
       newValue instanceof Promise
     ) {
-      self._state = 3;
-      self._value = newValue;
+      self._41 = 3;
+      self._86 = newValue;
       finale(self);
       return;
     } else if (typeof then === 'function') {
@@ -368,21 +369,21 @@ function resolve(self, newValue) {
       return;
     }
   }
-  self._state = 1;
-  self._value = newValue;
+  self._41 = 1;
+  self._86 = newValue;
   finale(self);
 }
 
 function reject(self, newValue) {
-  self._state = 2;
-  self._value = newValue;
+  self._41 = 2;
+  self._86 = newValue;
   finale(self);
 }
 function finale(self) {
-  for (var i = 0; i < self._deferreds.length; i++) {
-    handle(self, self._deferreds[i]);
+  for (var i = 0; i < self._17.length; i++) {
+    handle(self, self._17[i]);
   }
-  self._deferreds = null;
+  self._17 = null;
 }
 
 function Handler(onFulfilled, onRejected, promise){
@@ -417,11 +418,39 @@ function doResolve(fn, promise) {
 'use strict';
 
 
-var validNodeTypes = {
-  1  : true, // ELEMENT_NODE
-  9  : true, // DOCUMENT_NODE
-  11 : true  // DOCUMENT_FRAGMENT_NODE
-};
+/**
+ * @param {number} total
+ * @param {function} done
+ * @returns {{update: function}}
+ */
+function status(total, done) {
+  var status = {
+    loaded: 0,
+    total: total,
+    verified: 0
+  };
+
+  return {
+
+    /**
+     * @param {number} loaded
+     */
+    update : function(loaded) {
+      if (loaded) {
+        status.loaded += loaded;
+        status.verified += loaded;
+      }
+      else {
+        status.verified++;
+      }
+
+      if (status.total === status.verified) {
+        done(status);
+      }
+    }
+
+  };
+}
 
 
 /**
@@ -429,56 +458,61 @@ var validNodeTypes = {
  * @constructor
  *
  * @param {DocumentFragment|Element|Element[]|jQuery|NodeList|string} elements
- *
- * @param {{}}      [options]
- * @param {boolean} [options.auto] - used for testing only
- * @param {boolean} [options.jquery]
+ * @param {{}} [options]
+ * @param {boolean} [options.jquery=false]
  *
  */
 function ImagesReady(elements, options) {
-  options = options || {};
-
   if (typeof elements === 'string') {
     elements = document.querySelectorAll(elements);
     if (!elements.length) {
-      throw new Error('0 elements were found using selector `' + elements + '`');
+      throw new Error('selector `' + elements + '` yielded 0 elements');
     }
   }
 
-  var images = this.findImageElements(this.toList(elements));
-  var total = images.length;
+  var deferred = this.defer(options && options.jquery);
 
-  this.defer(options.jquery);
+  var images = this.imageElements(
+    this.validElements(this.toArray(elements), ImagesReady.VALID_NODE_TYPES)
+  );
 
-  if (images.length) {
-    this.elements = elements;
-    this.images = images;
-    this.total = total;
-    this.loaded = 0;
-    this.verified = 0;
+  var imageCount = images.length;
 
-    if (options.auto !== false) {
-      this.verify();
-    }
+  if (imageCount) {
+    this.verify(images, status(imageCount, function(status){
+      if (status.total === status.loaded) {
+        deferred.resolve(elements);
+      }
+      else {
+        deferred.reject(elements);
+      }
+    }));
   }
   else {
-    this.deferred.resolve(elements);
+    deferred.resolve(elements);
   }
 }
+
+
+ImagesReady.VALID_NODE_TYPES = {
+  1  : true, // ELEMENT_NODE
+  9  : true, // DOCUMENT_NODE
+  11 : true  // DOCUMENT_FRAGMENT_NODE
+};
 
 
 ImagesReady.prototype = {
 
   /**
    * @param {boolean} jquery
+   * @returns deferred
    */
   defer : function(jquery) {
-    var deferred,
-        result;
+    var deferred;
 
     if (jquery) {
       deferred = new $.Deferred();
-      result = deferred.promise();
+      this.result = deferred.promise();
     }
     else {
       deferred = {};
@@ -487,126 +521,114 @@ ImagesReady.prototype = {
         deferred.reject = reject;
       });
 
-      result = deferred.promise;
+      this.result = deferred.promise;
     }
 
-    this.deferred = deferred;
-    this.result = result;
+    return deferred;
   },
 
 
   /**
    * @param {Element[]} elements
-   * @returns {HTMLImageElement[]}
+   * @returns {[]|HTMLImageElement[]}
    */
-  findImageElements : function(elements) {
-    var images = [],
-        i = elements.length,
-        element,
-        imageElements;
+  imageElements : function(elements) {
+    var images = [];
 
-    while (i--) {
-      element = elements[i];
-
+    elements.forEach(function(element){
       if (element.nodeName === 'IMG') {
         images.push(element);
       }
-      else if (validNodeTypes[element.nodeType]) {
-        imageElements = element.querySelectorAll('img');
+      else {
+        var imageElements = element.querySelectorAll('img');
         for (var n = 0, l = imageElements.length; n < l; ++n) {
           images.push(imageElements[n]);
         }
       }
-    }
+    });
 
     return images;
   },
 
 
   /**
-   *
+   * @param {Element[]} elements
+   * @param {{}} validNodeTypes
+   * @returns {[]|Element[]}
    */
-  update : function() {
-    this.verified++;
-
-    if (this.total === this.verified) {
-      if (this.total === this.loaded) {
-        this.deferred.resolve(this.elements);
-      }
-      else {
-        this.deferred.reject(this.elements);
-      }
-
-      this.clean();
-    }
+  validElements : function(elements, validNodeTypes) {
+    return elements.filter(function(element){
+      return validNodeTypes[element.nodeType];
+    });
   },
 
 
   /**
-   *
+   * @param {HTMLImageElement[]} images
+   * @returns {[]|HTMLImageElement[]}
    */
-  verify : function() {
-    var images = this.images,
-        i = images.length,
-        image;
-
-    while (i--) {
-      image = images[i];
-
-      if (image.complete && image.naturalWidth) {
-        this.loaded++;
-        this.update();
-      }
-      else {
-        this.verifyByProxy(image.src);
-      }
-    }
+  incompleteImages : function(images) {
+    return images.filter(function(image){
+      return !(image.complete && image.naturalWidth);
+    });
   },
 
 
   /**
-   * @param {string} imageSrc
+   * @param {function} onload
+   * @param {function} onerror
+   * @returns {function(HTMLImageElement)}
    */
-  verifyByProxy : function(imageSrc) {
-    var image = new Image(),
-        that = this;
+  proxyImage : function(onload, onerror) {
+    return function(image) {
+      var _image = new Image();
 
-    var cleanup = function() {
-      image.removeEventListener('load', onload);
-      image.removeEventListener('error', onerror);
-      image = null;
+      _image.addEventListener('load', onload);
+      _image.addEventListener('error', onerror);
+      _image.src = image.src;
+
+      return _image;
     };
-
-    image.addEventListener('load', function onload(){
-      that.loaded++;
-      that.update();
-      cleanup();
-    });
-
-    image.addEventListener('error', function onerror(){
-      that.update();
-      cleanup();
-    });
-
-    image.src = imageSrc;
   },
 
 
   /**
-   *
+   * @param {HTMLImageElement[]} images
+   * @param {{update: function}} status
    */
-  clean : function() {
-    this.elements = null;
-    this.images = null;
+  verify : function(images, status) {
+    var incomplete = this.incompleteImages(images);
+
+    if (images.length !== incomplete.length) {
+      status.update(images.length - incomplete.length);
+    }
+
+    if (incomplete.length) {
+      incomplete.forEach(this.proxyImage(
+        function(){
+          status.update(1);
+        },
+        function(){
+          status.update(0);
+        }
+      ));
+    }
   },
 
 
   /**
-   * @param {Element|Element[]|jQuery|NodeList} object
-   * @returns {Element[]|jQuery|NodeList}
+   * @param {DocumentFragment|Element|Element[]|jQuery|NodeList} object
+   * @returns {Element[]}
    */
-  toList : function(object) {
-    if (typeof object.length === 'number') return object;
+  toArray : function(object) {
+    if (Array.isArray(object)) {
+      return object;
+    }
+
+    if (typeof object.length === 'number') {
+      return [].slice.call(object);
+    }
+
     return [object];
   }
 
@@ -618,7 +640,7 @@ ImagesReady.prototype = {
 =========================================================*/
 if (window.jQuery) {
   $.fn.imagesReady = function() {
-    var instance = new ImagesReady(this, {jquery: true}); // eslint-disable-line no-shadow
+    var instance = new ImagesReady(this, {jquery: true});
     return instance.result;
   };
 }

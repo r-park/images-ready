@@ -31,9 +31,9 @@ module.exports = function(config) {
       'vendor/asap/browser-raw.js',
       'vendor/promise/core.js',
       'src/imagesready.js',
-      {pattern: 'test/images/*', watched: false, included: false, served: true},
       'test/*.html',
-      'test/imagesready.spec.js'
+      'test/imagesready.spec.js',
+      {pattern: 'test/images/*', watched: false, included: false, served: true}
     ],
 
 
