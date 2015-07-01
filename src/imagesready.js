@@ -27,7 +27,6 @@ function status(imageCount, done) {
       update();
     },
 
-
     /**
      * @param {number} count
      */
@@ -129,8 +128,8 @@ ImagesReady.prototype = {
       }
       else {
         var imageElements = element.querySelectorAll('img');
-        for (var n = 0, l = imageElements.length; n < l; ++n) {
-          images.push(imageElements[n]);
+        if (imageElements.length) {
+          images.push.apply(images, imageElements);
         }
       }
     });

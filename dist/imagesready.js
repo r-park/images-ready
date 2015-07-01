@@ -1,4 +1,4 @@
-/* imagesready v0.2.1 - 2015-07-01T21:35:44.385Z - https://github.com/r-park/images-ready */
+/* imagesready v0.2.1 - 2015-07-01T22:50:04.679Z - https://github.com/r-park/images-ready */
 ;(function(root, factory) {
   if (typeof define === 'function' && define.amd) {
     define([], factory);
@@ -444,7 +444,6 @@ function status(imageCount, done) {
       update();
     },
 
-
     /**
      * @param {number} count
      */
@@ -546,8 +545,8 @@ ImagesReady.prototype = {
       }
       else {
         var imageElements = element.querySelectorAll('img');
-        for (var n = 0, l = imageElements.length; n < l; ++n) {
-          images.push(imageElements[n]);
+        if (imageElements.length) {
+          images.push.apply(images, imageElements);
         }
       }
     });
