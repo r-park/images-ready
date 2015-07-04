@@ -179,7 +179,7 @@ describe("ImagesReady", function(){
       elements.appendChild(new Image());
 
       var imagesReady = new ImagesReady(elements);
-      var images = [elements.children[0], elements.children[1]];
+      var images = [elements.childNodes[0], elements.childNodes[1]];
 
       expect(imagesReady.imageElements.returned(images)).toBe(true);
     });
