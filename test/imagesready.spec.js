@@ -251,7 +251,7 @@ describe("ImagesReady", function(){
   describe("Verifying images – jQuery", function(){
     it("should fulfill promise when images are already loaded (cached)", function(done){
       var image = {complete: true, naturalWidth: 100, nodeName: 'IMG', nodeType: 1};
-      var imagesReady = new ImagesReady(image, {jquery: true});
+      var imagesReady = new ImagesReady(image, true);
 
       imagesReady.result.then(
         function(){
@@ -265,7 +265,7 @@ describe("ImagesReady", function(){
 
 
     it("should fulfill promise when all images have loaded", function(done){
-      var imagesReady = new ImagesReady('.content', {jquery: true});
+      var imagesReady = new ImagesReady('.content', true);
 
       imagesReady.result.then(
         function(){
@@ -279,7 +279,7 @@ describe("ImagesReady", function(){
 
 
     it("should reject promise when one or more images have failed to load", function(done){
-      var imagesReady = new ImagesReady('.fail', {jquery: true});
+      var imagesReady = new ImagesReady('.fail', true);
 
       imagesReady.result.then(
         function(){
@@ -294,7 +294,7 @@ describe("ImagesReady", function(){
 
     it("should fulfill promise when image src is a data-uri", function(done){
       var element = document.querySelector('.data-uri');
-      var imagesReady = new ImagesReady(element, {jquery: true});
+      var imagesReady = new ImagesReady(element, true);
 
       imagesReady.result.then(
         function(){
@@ -409,7 +409,7 @@ describe("ImagesReady", function(){
     it("should attempt proxy verification when image.complete is not true", function(done){
       var image = {complete: false, naturalWidth: 100, nodeName: 'IMG', nodeType: 1, src: '/base/test/images/1.jpg'};
 
-      var imagesReady = new ImagesReady(image, {jquery: true});
+      var imagesReady = new ImagesReady(image, true);
 
       imagesReady.result.then(
         function(){
@@ -425,7 +425,7 @@ describe("ImagesReady", function(){
     it("should attempt proxy verification when image.naturalWidth is not greater than 0", function(done){
       var image = {complete: true, naturalWidth: 0, nodeName: 'IMG', nodeType: 1, src: '/base/test/images/1.jpg'};
 
-      var imagesReady = new ImagesReady(image, {jquery: true});
+      var imagesReady = new ImagesReady(image, true);
 
       imagesReady.result.then(
         function(){
@@ -444,7 +444,7 @@ describe("ImagesReady", function(){
         {complete: false, nodeName: 'IMG', nodeType: 1, src: '/base/test/images/2.jpg'}
       ];
 
-      var imagesReady = new ImagesReady(images, {jquery: true});
+      var imagesReady = new ImagesReady(images, true);
 
       imagesReady.result.then(
         function(){
@@ -463,7 +463,7 @@ describe("ImagesReady", function(){
         {complete: false, nodeName: 'IMG', nodeType: 1, src: 'foo'}
       ];
 
-      var imagesReady = new ImagesReady(images, {jquery: true});
+      var imagesReady = new ImagesReady(images, true);
 
       imagesReady.result.then(
         function(){

@@ -1,6 +1,6 @@
 {
   "name": "imagesready",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "ImagesReady is a lightweight utility for detecting when images have been loaded. It supports promises and can be used with or without jQuery.",
   "homepage": "https://github.com/r-park/images-ready",
   "repository": "https://github.com/r-park/images-ready.git",

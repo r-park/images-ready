@@ -1,4 +1,4 @@
-/* imagesready v0.2.1 - 2015-07-01T22:50:04.679Z - https://github.com/r-park/images-ready */
+/* imagesready v0.2.2 - 2015-07-04T06:22:14.435Z - https://github.com/r-park/images-ready */
 ;(function(root, factory) {
   if (typeof define === 'function' && define.amd) {
     define([], factory);
@@ -12,54 +12,14 @@
 
 
 /**
- * @param {number} imageCount
- * @param {function} done
- * @returns {{failed: function, loaded: function}}
- */
-function status(imageCount, done) {
-  var loaded = 0,
-      total = imageCount,
-      verified = 0;
-
-  function update() {
-    if (total === verified) {
-      done(total === loaded);
-    }
-  }
-
-  return {
-
-    /**
-     * @param {number} count
-     */
-    failed : function(count) {
-      verified += count;
-      update();
-    },
-
-    /**
-     * @param {number} count
-     */
-    loaded : function(count) {
-      loaded += count;
-      verified += count;
-      update();
-    }
-
-  };
-}
-
-
-/**
  * @name ImagesReady
  * @constructor
  *
  * @param {DocumentFragment|Element|Element[]|jQuery|NodeList|string} elements
- * @param {{}} [options]
- * @param {boolean} [options.jquery=false]
+ * @param {boolean} jquery
  *
  */
-function ImagesReady(elements, options) {
+function ImagesReady(elements, jquery) {
   if (typeof elements === 'string') {
     elements = document.querySelectorAll(elements);
     if (!elements.length) {
@@ -67,7 +27,8 @@ function ImagesReady(elements, options) {
     }
   }
 
-  var deferred = this.defer(options && options.jquery);
+  var deferred = defer(jquery);
+  this.result = deferred.promise;
 
   var images = this.imageElements(
     this.validElements(this.toArray(elements), ImagesReady.VALID_NODE_TYPES)
@@ -99,31 +60,6 @@ ImagesReady.VALID_NODE_TYPES = {
 
 
 ImagesReady.prototype = {
-
-  /**
-   * @param {boolean} jquery
-   * @returns deferred
-   */
-  defer : function(jquery) {
-    var deferred;
-
-    if (jquery) {
-      deferred = new $.Deferred();
-      this.result = deferred.promise();
-    }
-    else {
-      deferred = {};
-      deferred.promise = new Promise(function(resolve, reject){
-        deferred.resolve = resolve;
-        deferred.reject = reject;
-      });
-
-      this.result = deferred.promise;
-    }
-
-    return deferred;
-  },
-
 
   /**
    * @param {Element[]} elements
@@ -232,12 +168,75 @@ ImagesReady.prototype = {
 };
 
 
+/**
+ * @param jquery
+ * @returns deferred
+ */
+function defer(jquery) {
+  var deferred;
+
+  if (jquery) {
+    deferred = new $.Deferred();
+    deferred.promise = deferred.promise();
+  }
+  else {
+    deferred = {};
+    deferred.promise = new Promise(function(resolve, reject){
+      deferred.resolve = resolve;
+      deferred.reject = reject;
+    });
+  }
+
+  return deferred;
+}
+
+
+/**
+ * @param {number} imageCount
+ * @param {function} done
+ * @returns {{failed: function, loaded: function}}
+ */
+function status(imageCount, done) {
+  var loaded = 0,
+      total = imageCount,
+      verified = 0;
+
+  function update() {
+    if (total === verified) {
+      done(total === loaded);
+    }
+  }
+
+  return {
+
+    /**
+     * @param {number} count
+     */
+    failed : function(count) {
+      verified += count;
+      update();
+    },
+
+    /**
+     * @param {number} count
+     */
+    loaded : function(count) {
+      loaded += count;
+      verified += count;
+      update();
+    }
+
+  };
+}
+
+
+
 /*=========================================================
   jQuery plugin
 =========================================================*/
 if (window.jQuery) {
   $.fn.imagesReady = function() {
-    var instance = new ImagesReady(this, {jquery: true});
+    var instance = new ImagesReady(this, true);
     return instance.result;
   };
 }
