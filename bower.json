@@ -6,6 +6,7 @@
   "repository": "https://github.com/r-park/images-ready.git",
   "author": "Richard Park",
   "license": "MIT",
+
   "ignore": [
     "node_modules",
     "src",
@@ -15,8 +16,10 @@
     "**/.*",
     "gulpfile.js",
     "karma.conf.js",
-    "package.json"
+    "package.json",
+    "sauce.conf.js"
   ],
+
   "keywords": [
     "images",
     "imagesready",
@@ -25,6 +28,7 @@
     "loaded",
     "onload"
   ],
+
   "moduleType": [
     "amd",
     "globals",

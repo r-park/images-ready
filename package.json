@@ -9,7 +9,7 @@
 
   "scripts": {
     "coveralls": "gulp coveralls",
-    "test": "./node_modules/karma/bin/karma start karma-ci.conf.js --single-run --coverage"
+    "test": "./node_modules/karma/bin/karma start --single-run --sauce --coverage"
   },
 
   "devDependencies": {

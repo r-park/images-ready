@@ -1,13 +1,22 @@
 language: node_js
 
-node_js:
-  - "0.12"
+node_js: 0.12
 
-before_script:
-  - export DISPLAY=:99.0
-  - sh -e /etc/init.d/xvfb start
+env:
+  global:
+    - secure: eSIb9Rgm2d7cjfODPs6F/1TbQ6lcPsXoonBReqTO5cReZaU5bUsuZRgnxVQ3y7ZhVPlpnMPFoYxI4EXyEygaU43OE/HMU/GDsLCMA5s7v/0+q4lmlTmMy/Xng9HwIU9XMwBmjnENr36A5dLPwAabqFLcjurVahrMHVMAxdhFXIMKFEWJ3jne/ntU+VwyPOr0T+b9sfY3mG7PECkkqGMxa9dLmOKv0Mq3nI+YO/NzZVNueYNxI6QpyKNNSFlJ2bxwuE33rI/aDxgH79QBKxV4owfjZ7onfxhLiF2QUHlM1YyzGn3YtMVRlbQ3pMTP+6tjcgLSBfj3BMUQbdIRpy8BXDMIFXurL+CAbDUb4WLczHd0cp4tqeNdhsxalPdntylVjH+puIx9MZGERDxfBaaTnee9GmwYYhML5xrcXg4Oklqor3COQES1fU2JQDvX9uJ4O8KMa26gc/rdChExiJ8bMur0pPn14/aixenmcgFz19S2yN3vz1UMAO5/KRaktM7ortFrjXnuvZMeyNc1DlB53IK1fADS5yjHP/7k4bPLZRn8bwcjlBt+tWJOqQZxw1wOu4pp6H7rKRiyljGTA2sRqEiuqmlm9u/XT/OzcIMDNObM773KAkXVH9ZJhBgT/AHqGazbuxxZXMZPyOaBoJ7nDh8QngRkMD15+6MbWmhTJHk=
+    - secure: jfpO9+9DreuBamO2UO7rNWFMdrQdtEcWD8nCOiaPeBRLRprImOrgOZzGrdiOYks5PmnPyzKJIWjyW/vX2+7UkzKQDm802J4OB7e/vSrvW52Cm1ILovoRGFRnP31fKptFAtk8cWgVpjCZbdZmXV34oAAuqky1kcFL5ukEtgPpbQRHrot8eTAVh3Ce6KCG07GFRYz4VUfmAlh2y7qSjLjGeyHgdRz+xKsSoE/b3mSn9NeH8KS+SF474iTmCPDaAlzvUYr3we+XRHXKvMOeAvWyJEFgh5k2kM6MWl6k7u1AQWjvRwMcET+NV6kcugueLX+WlQBmF0Joh+DN40UYDk07BlMPuV+K62h2k+4+1JwXe9puEMigC1xWJ1NfC5mK6bYa6NJBchMTTnNioRdh8mjGZ2ZrIyAC9zYIOnRplTy1teZouOjD+qgbI2ZD/SQ6bDW7CqYitLbIv0H96wEoeYv800o2Ey4udo2Vq/mw0HALv4nXkha/a9J+8AmOvmOgfVAheWIfK6DWkCS71xZBefmXRTObJDJpcvveFVUsp/msBdYtKMINqAjQ1Edv0udDmvbg6/SdcWyJCmLm4p2ME7aA4r4t3J2x3GXQpIBMbwy5gb46rvAzSyzdjn+iTx8j5GWl2Ym5qKoBLBeNmtNo55mReUY3fV69uLUbo2UBnORrk70=
 
-script: npm test
+install:
+  - npm install
 
-after_script:
-  - npm run coveralls
+script:
+  - npm test
+
+#after_success:
+#  - npm run coveralls
+
+notifications:
+  email:
+    on_failure: change
+    on_success: change
