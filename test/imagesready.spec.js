@@ -1,4 +1,4 @@
-describe("ImagesReady", function(){
+describe('ImagesReady', function(){
 
   fixture.setBase('test');
 
@@ -19,15 +19,15 @@ describe("ImagesReady", function(){
   }
 
 
-  describe("Constructor", function(){
-    it("should throw {Error} if zero elements are found using provided CSS selector", function(){
+  describe('Constructor', function(){
+    it('should throw {Error} if zero elements are found using provided CSS selector', function(){
       expect(function(){
         new ImagesReady('.no-element');
       }).toThrow();
     });
 
 
-    it("should invoke verification method if image elements are found", function(){
+    it('should invoke verification method if image elements are found', function(){
       sinon.spy(ImagesReady.prototype, 'verify');
 
       var imagesReady = new ImagesReady('#content-1');
@@ -38,7 +38,7 @@ describe("ImagesReady", function(){
     });
 
 
-    it("should invoke verification method with the list of found image elements", function(){
+    it('should invoke verification method with the list of found image elements', function(){
       sinon.spy(ImagesReady.prototype, 'verify');
 
       var images = getElements('#content-1 img');
@@ -50,7 +50,7 @@ describe("ImagesReady", function(){
     });
 
 
-    it("should invoke verification method with status object", function(){
+    it('should invoke verification method with status object', function(){
       sinon.spy(ImagesReady.prototype, 'verify');
 
       var imagesReady = new ImagesReady('#content-1');
@@ -63,7 +63,7 @@ describe("ImagesReady", function(){
     });
 
 
-    it("should skip verification method if image elements are not found", function(){
+    it('should skip verification method if image elements are not found', function(){
       sinon.spy(ImagesReady.prototype, 'verify');
 
       var imagesReady = new ImagesReady('.empty');
@@ -74,7 +74,7 @@ describe("ImagesReady", function(){
     });
 
 
-    it("should automatically fulfill promise if image elements are not found", function(done){
+    it('should automatically fulfill promise if image elements are not found', function(done){
       var imagesReady = new ImagesReady('.empty');
 
       imagesReady.result.then(
@@ -90,8 +90,8 @@ describe("ImagesReady", function(){
   });
 
 
-  describe("Finding valid elements", function(){
-    it("should return a filtered list of valid elements", function(){
+  describe('Finding valid elements', function(){
+    it('should return a filtered list of valid elements', function(){
       var elementNode = document.createElement('div'),
           documentFragmentNode = document.createDocumentFragment(),
           documentNode = document.documentElement,
@@ -107,7 +107,7 @@ describe("ImagesReady", function(){
   });
 
 
-  describe("Finding image elements", function(){
+  describe('Finding image elements', function(){
 
     beforeEach(function(){
       sinon.spy(ImagesReady.prototype, 'imageElements');
@@ -119,7 +119,7 @@ describe("ImagesReady", function(){
     });
 
 
-    it("should find images from a CSS selector", function(){
+    it('should find images from a CSS selector', function(){
       var elements = '#content-1';
       var imagesReady = new ImagesReady(elements);
       var images = getElements('#content-1 img');
@@ -128,7 +128,7 @@ describe("ImagesReady", function(){
     });
 
 
-    it("should find images from a single HTMLElement", function(){
+    it('should find images from a single HTMLElement', function(){
       var elements = document.querySelector('#content-1');
       var imagesReady = new ImagesReady(elements);
       var images = getElements('#content-1 img');
@@ -137,7 +137,7 @@ describe("ImagesReady", function(){
     });
 
 
-    it("should find images from a Array.<HTMLElement>", function(){
+    it('should find images from a Array.<HTMLElement>', function(){
       var elements = [document.querySelector('#content-1'), document.querySelector('#content-2')];
       var imagesReady = new ImagesReady(elements);
       var images = getElements('#content-1 img, #content-2 img');
@@ -146,7 +146,7 @@ describe("ImagesReady", function(){
     });
 
 
-    it("should find images from a jQuery-wrapped collection", function(){
+    it('should find images from a jQuery-wrapped collection', function(){
       var elements = $('.content');
       var imagesReady = new ImagesReady(elements);
       var images = getElements('.content img');
@@ -155,7 +155,7 @@ describe("ImagesReady", function(){
     });
 
 
-    it("should find images from a NodeList", function(){
+    it('should find images from a NodeList', function(){
       var elements = document.querySelectorAll('.content');
       var imagesReady = new ImagesReady(elements);
       var images = getElements('.content img');
@@ -164,7 +164,7 @@ describe("ImagesReady", function(){
     });
 
 
-    it("should find images from a HTMLImageElement", function(){
+    it('should find images from a HTMLImageElement', function(){
       var elements = document.querySelectorAll('.image');
       var imagesReady = new ImagesReady(elements);
       var images = getElements('.image');
@@ -173,7 +173,7 @@ describe("ImagesReady", function(){
     });
 
 
-    it("should find images from a DocumentFragment", function(){
+    it('should find images from a DocumentFragment', function(){
       var elements = document.createDocumentFragment();
       elements.appendChild(new Image());
       elements.appendChild(new Image());
@@ -186,8 +186,8 @@ describe("ImagesReady", function(){
   });
 
 
-  describe("Verifying images", function(){
-    it("should fulfill promise when images are already loaded (cached)", function(done){
+  describe('Verifying images', function(){
+    it('should fulfill promise when images are already loaded (cached)', function(done){
       var image = {complete: true, naturalWidth: 100, nodeName: 'IMG', nodeType: 1};
       var imagesReady = new ImagesReady(image);
 
@@ -195,42 +195,45 @@ describe("ImagesReady", function(){
         function(){
           expect(true).toBe(true);
           done();
-        },function(){
+        },
+        function(){
           expect(false).toBe(true);
           done();
         });
     });
 
 
-    it("should fulfill promise when all images have loaded", function(done){
+    it('should fulfill promise when all images have loaded', function(done){
       var imagesReady = new ImagesReady('.content');
 
       imagesReady.result.then(
         function(){
           expect(true).toBe(true);
           done();
-        },function(){
+        },
+        function(){
           expect(false).toBe(true);
           done();
         });
     });
 
 
-    it("should reject promise when one or more images have failed to load", function(done){
+    it('should reject promise when one or more images have failed to load', function(done){
       var imagesReady = new ImagesReady('.fail');
 
       imagesReady.result.then(
         function(){
           expect(false).toBe(true);
           done();
-        },function(){
+        },
+        function(){
           expect(true).toBe(true);
           done();
         });
     });
 
 
-    it("should fulfill promise when image src is a data-uri", function(done){
+    it('should fulfill promise when image src is a data-uri', function(done){
       var element = document.querySelector('.data-uri');
       var imagesReady = new ImagesReady(element);
 
@@ -248,8 +251,8 @@ describe("ImagesReady", function(){
   });
 
 
-  describe("Verifying images – jQuery", function(){
-    it("should fulfill promise when images are already loaded (cached)", function(done){
+  describe('Verifying images – jQuery', function(){
+    it('should fulfill promise when images are already loaded (cached)', function(done){
       var image = {complete: true, naturalWidth: 100, nodeName: 'IMG', nodeType: 1};
       var imagesReady = new ImagesReady(image, true);
 
@@ -257,42 +260,45 @@ describe("ImagesReady", function(){
         function(){
           expect(true).toBe(true);
           done();
-        },function(){
+        },
+        function(){
           expect(false).toBe(true);
           done();
         });
     });
 
 
-    it("should fulfill promise when all images have loaded", function(done){
+    it('should fulfill promise when all images have loaded', function(done){
       var imagesReady = new ImagesReady('.content', true);
 
       imagesReady.result.then(
         function(){
           expect(true).toBe(true);
           done();
-        },function(){
+        },
+        function(){
           expect(false).toBe(true);
           done();
         });
     });
 
 
-    it("should reject promise when one or more images have failed to load", function(done){
+    it('should reject promise when one or more images have failed to load', function(done){
       var imagesReady = new ImagesReady('.fail', true);
 
       imagesReady.result.then(
         function(){
           expect(false).toBe(true);
           done();
-        },function(){
+        },
+        function(){
           expect(true).toBe(true);
           done();
         });
     });
 
 
-    it("should fulfill promise when image src is a data-uri", function(done){
+    it('should fulfill promise when image src is a data-uri', function(done){
       var element = document.querySelector('.data-uri');
       var imagesReady = new ImagesReady(element, true);
 
@@ -310,7 +316,7 @@ describe("ImagesReady", function(){
   });
 
 
-  describe("Verifying with proxy images", function(){
+  describe('Verifying with proxy images', function(){
 
     beforeEach(function(){
       sinon.spy(ImagesReady.prototype, 'proxyImage');
@@ -322,7 +328,7 @@ describe("ImagesReady", function(){
     });
 
 
-    it("should attempt proxy verification when image.complete is not true", function(done){
+    it('should attempt proxy verification when image.complete is not true', function(done){
       var image = {complete: false, naturalWidth: 100, nodeName: 'IMG', nodeType: 1, src: '/base/test/images/1.jpg'};
 
       var imagesReady = new ImagesReady(image);
@@ -331,14 +337,15 @@ describe("ImagesReady", function(){
         function(){
           expect(imagesReady.proxyImage.callCount).toBe(1);
           done();
-        },function(){
+        },
+        function(){
           expect(false).toBe(true);
           done();
         });
     });
 
 
-    it("should attempt proxy verification when image.naturalWidth is not greater than 0", function(done){
+    it('should attempt proxy verification when image.naturalWidth is not greater than 0', function(done){
       var image = {complete: true, naturalWidth: 0, nodeName: 'IMG', nodeType: 1, src: '/base/test/images/1.jpg'};
 
       var imagesReady = new ImagesReady(image);
@@ -347,14 +354,15 @@ describe("ImagesReady", function(){
         function(){
           expect(imagesReady.proxyImage.callCount).toBe(1);
           done();
-        },function(){
+        },
+        function(){
           expect(false).toBe(true);
           done();
         });
     });
 
 
-    it("should fulfill promise when all proxy images have loaded", function(done){
+    it('should fulfill promise when all proxy images have loaded', function(done){
       var images = [
         {complete: false, nodeName: 'IMG', nodeType: 1, src: '/base/test/images/1.jpg'},
         {complete: false, nodeName: 'IMG', nodeType: 1, src: '/base/test/images/2.jpg'}
@@ -366,14 +374,15 @@ describe("ImagesReady", function(){
         function(){
           expect(imagesReady.proxyImage.callCount).toBe(1);
           done();
-        },function(){
+        },
+        function(){
           expect(false).toBe(true);
           done();
         });
     });
 
 
-    it("should reject promise when one or more proxy images have failed to load", function(done){
+    it('should reject promise when one or more proxy images have failed to load', function(done){
       var images = [
         {complete: false, nodeName: 'IMG', nodeType: 1, src: '/base/test/images/1.jpg'},
         {complete: false, nodeName: 'IMG', nodeType: 1, src: 'foo'}
@@ -385,7 +394,8 @@ describe("ImagesReady", function(){
         function(){
           expect(false).toBe(true);
           done();
-        },function(){
+        },
+        function(){
           expect(imagesReady.proxyImage.callCount).toBe(1);
           expect(true).toBe(true);
           done();
@@ -394,7 +404,7 @@ describe("ImagesReady", function(){
   });
 
 
-  describe("Verifying with proxy images – jQuery", function(){
+  describe('Verifying with proxy images – jQuery', function(){
 
     beforeEach(function(){
       sinon.spy(ImagesReady.prototype, 'proxyImage');
@@ -406,7 +416,7 @@ describe("ImagesReady", function(){
     });
 
 
-    it("should attempt proxy verification when image.complete is not true", function(done){
+    it('should attempt proxy verification when image.complete is not true', function(done){
       var image = {complete: false, naturalWidth: 100, nodeName: 'IMG', nodeType: 1, src: '/base/test/images/1.jpg'};
 
       var imagesReady = new ImagesReady(image, true);
@@ -415,14 +425,15 @@ describe("ImagesReady", function(){
         function(){
           expect(imagesReady.proxyImage.callCount).toBe(1);
           done();
-        },function(){
+        },
+        function(){
           expect(false).toBe(true);
           done();
         });
     });
 
 
-    it("should attempt proxy verification when image.naturalWidth is not greater than 0", function(done){
+    it('should attempt proxy verification when image.naturalWidth is not greater than 0', function(done){
       var image = {complete: true, naturalWidth: 0, nodeName: 'IMG', nodeType: 1, src: '/base/test/images/1.jpg'};
 
       var imagesReady = new ImagesReady(image, true);
@@ -431,14 +442,15 @@ describe("ImagesReady", function(){
         function(){
           expect(imagesReady.proxyImage.callCount).toBe(1);
           done();
-        },function(){
+        },
+        function(){
           expect(false).toBe(true);
           done();
         });
     });
 
 
-    it("should fulfill promise when all proxy images have loaded", function(done){
+    it('should fulfill promise when all proxy images have loaded', function(done){
       var images = [
         {complete: false, nodeName: 'IMG', nodeType: 1, src: '/base/test/images/1.jpg'},
         {complete: false, nodeName: 'IMG', nodeType: 1, src: '/base/test/images/2.jpg'}
@@ -450,14 +462,15 @@ describe("ImagesReady", function(){
         function(){
           expect(imagesReady.proxyImage.callCount).toBe(1);
           done();
-        },function(){
+        },
+        function(){
           expect(false).toBe(true);
           done();
         });
     });
 
 
-    it("should reject promise when one or more proxy images have failed to load", function(done){
+    it('should reject promise when one or more proxy images have failed to load', function(done){
       var images = [
         {complete: false, nodeName: 'IMG', nodeType: 1, src: '/base/test/images/1.jpg'},
         {complete: false, nodeName: 'IMG', nodeType: 1, src: 'foo'}
@@ -469,7 +482,8 @@ describe("ImagesReady", function(){
         function(){
           expect(false).toBe(true);
           done();
-        },function(){
+        },
+        function(){
           expect(imagesReady.proxyImage.callCount).toBe(1);
           expect(true).toBe(true);
           done();
@@ -478,8 +492,8 @@ describe("ImagesReady", function(){
   });
 
 
-  describe("Verification results", function(){
-    it("should fulfill promise with provided elements", function(done){
+  describe('Verification results', function(){
+    it('should fulfill promise with provided elements', function(done){
       var elements = document.querySelectorAll('.content');
       var imagesReady = new ImagesReady(elements);
 
@@ -496,7 +510,7 @@ describe("ImagesReady", function(){
     });
 
 
-    it("should reject promise with provided elements", function(done){
+    it('should reject promise with provided elements', function(done){
       var elements = document.querySelector('.fail');
       var imagesReady = new ImagesReady(elements);
 
@@ -514,16 +528,16 @@ describe("ImagesReady", function(){
   });
 
 
-  describe("Default entry point", function(){
-    it("should return a promise", function(){
+  describe('Default entry point', function(){
+    it('should return a promise', function(){
       var promise = imagesReady('.content');
       expect(typeof promise.then).toBe('function');
     });
   });
 
 
-  describe("jQuery plugin entry point", function(){
-    it("should return a promise", function(){
+  describe('jQuery plugin entry point', function(){
+    it('should return a promise', function(){
       var promise = $('.content').imagesReady();
       expect(typeof promise.then).toBe('function');
     });
