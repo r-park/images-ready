@@ -9,30 +9,6 @@ exports.customLaunchers = {
     browserName: 'firefox',
     version: '38'
   },
-  'SL_SAFARI7': {
-    base: 'SauceLabs',
-    browserName: 'safari',
-    platform: 'OS X 10.9',
-    version: '7'
-  },
-  'SL_SAFARI8': {
-    base: 'SauceLabs',
-    browserName: 'safari',
-    platform: 'OS X 10.10',
-    version: '8'
-  },
-  'SL_IOS7': {
-    base: 'SauceLabs',
-    browserName: 'iphone',
-    platform: 'OS X 10.10',
-    version: '7.1'
-  },
-  'SL_IOS8': {
-    base: 'SauceLabs',
-    browserName: 'iphone',
-    platform: 'OS X 10.10',
-    version: '8.4'
-  },
   'SL_IE9': {
     base: 'SauceLabs',
     browserName: 'internet explorer',
@@ -48,6 +24,18 @@ exports.customLaunchers = {
     browserName: 'internet explorer',
     version: '11'
   },
+  'SL_SAFARI7': {
+    base: 'SauceLabs',
+    browserName: 'safari',
+    platform: 'OS X 10.9',
+    version: '7'
+  },
+  'SL_SAFARI8': {
+    base: 'SauceLabs',
+    browserName: 'safari',
+    platform: 'OS X 10.10',
+    version: '8'
+  },
   'SL_ANDROID4.1': {
     base: 'SauceLabs',
     browserName: 'android',
@@ -60,4 +48,16 @@ exports.customLaunchers = {
     platform: 'Linux',
     version: '5.1'
   }
+  /*
+  'SL_IOS7': {
+    base: 'SauceLabs',
+    browserName: 'iphone',
+    version: '7'
+  },
+  'SL_IOS8': {
+    base: 'SauceLabs',
+    browserName: 'iphone',
+    version: '8'
+  }
+  */
 };
