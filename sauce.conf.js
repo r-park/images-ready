@@ -47,8 +47,7 @@ exports.customLaunchers = {
     browserName: 'android',
     platform: 'Linux',
     version: '5.1'
-  }
-  /*
+  },
   'SL_IOS7': {
     base: 'SauceLabs',
     browserName: 'iphone',
@@ -59,5 +58,4 @@ exports.customLaunchers = {
     browserName: 'iphone',
     version: '8'
   }
-  */
 };

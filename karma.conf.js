@@ -73,15 +73,20 @@ module.exports = function(config) {
 
 
   // additional configuration for sauce-labs
-  if (process.argv.indexOf('--sauce') !== -1) {
+  if (process.env.TRAVIS) {
     var sauceConfig = require('./sauce.conf');
     options.customLaunchers = sauceConfig.customLaunchers;
     options.browsers = Object.keys(sauceConfig.customLaunchers);
     options.sauceLabs = {
-      testName: 'images-ready',
+      build: 'TRAVIS #' + process.env.TRAVIS_BUILD_NUMBER + ' (' + process.env.TRAVIS_BUILD_ID + ')',
+      options: {
+        'selenium-version': '2.45.0'
+      },
       startConnect: true,
+      recordScreenshots: false,
       recordVideo: false,
-      recordScreenshots: false
+      testName: 'images-ready',
+      tunnelIdentifier: process.env.TRAVIS_JOB_NUMBER
     };
   }
 
