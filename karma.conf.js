@@ -75,13 +75,10 @@ module.exports = function(config) {
   // additional configuration for sauce-labs
   if (process.env.TRAVIS) {
     var sauceConfig = require('./sauce.conf');
-    options.customLaunchers = sauceConfig.customLaunchers;
     options.browsers = Object.keys(sauceConfig.customLaunchers);
+    options.customLaunchers = sauceConfig.customLaunchers;
     options.sauceLabs = {
       build: 'TRAVIS #' + process.env.TRAVIS_BUILD_NUMBER + ' (' + process.env.TRAVIS_BUILD_ID + ')',
-      options: {
-        'selenium-version': '2.45.0'
-      },
       startConnect: true,
       recordScreenshots: false,
       recordVideo: false,
