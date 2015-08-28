@@ -68,11 +68,12 @@ $('.container').imagesReady().then(ready, error);
 // $('.container') will be passed to both `ready` and `error` handlers
 ```
 
-## Browser Support
+## Tested Browsers
+- Android 4.1+
 - Chrome
 - Firefox
 - IE 9+
-- Safari
+- Safari 7+
 
 ## Module Support
 - AMD
