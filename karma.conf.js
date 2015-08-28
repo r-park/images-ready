@@ -76,12 +76,12 @@ module.exports = function(config) {
   if (process.env.TRAVIS) {
     var sauceConfig = require('./sauce.conf');
     options.browsers = Object.keys(sauceConfig.customLaunchers);
+    options.captureTimeout = 180000;
     options.customLaunchers = sauceConfig.customLaunchers;
     options.sauceLabs = {
       build: 'TRAVIS #' + process.env.TRAVIS_BUILD_NUMBER + ' (' + process.env.TRAVIS_BUILD_ID + ')',
       startConnect: true,
       recordScreenshots: false,
-      recordVideo: false,
       testName: 'images-ready',
       tunnelIdentifier: process.env.TRAVIS_JOB_NUMBER
     };
