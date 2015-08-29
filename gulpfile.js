@@ -219,7 +219,7 @@ gulp.task('build', gulp.series(
 gulp.task('dist.minor', gulp.series(
   'build',
   'uglify',
-  'bump.patch',
+  'bump.minor',
   'headers'
 ));
 
