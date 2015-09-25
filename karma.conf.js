@@ -76,6 +76,7 @@ module.exports = function(config) {
   if (process.env.TRAVIS) {
     var sauceConfig = require('./sauce.conf');
     options.browsers = Object.keys(sauceConfig.customLaunchers);
+    options.browserNoActivityTimeout = 120000;
     options.captureTimeout = 180000;
     options.customLaunchers = sauceConfig.customLaunchers;
     options.sauceLabs = {
